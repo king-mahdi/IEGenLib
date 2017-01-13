@@ -1,0 +1,92 @@
+---- CSR_Gauss-Seidel:
+
+Number of cunjunctions: 2
+Number of iterators: 8
+
+Name of method     , UnSat Conj., % of Total, Projected TVs, % of Total
+Super_Affine_Set   , 0, 0, NA, NA, 
+Domain_Specific    , 0, 0, NA, NA, 
+Monotonicity       , 0, 0, NA, NA, 
+Projection         , 0, 0, 2, 25
+Simplification     , 0, 0, 2, 25
+
+
+---- CSR_ILU:
+
+Number of cunjunctions: 16
+Number of iterators: 128
+
+Name of method     , UnSat Conj., % of Total, Projected TVs, % of Total
+Super_Affine_Set   , 0, 0, NA, NA, 
+Domain_Specific    , 0, 0, NA, NA, 
+Monotonicity       , 10, 62, NA, NA, 
+Projection         , 0, 0, 0, 0
+Simplification     , 10, 62, 24, 18
+
+
+---- BCSR_Gauss-Seidel:
+
+Number of cunjunctions: 4
+Number of iterators: 32
+
+Name of method     , UnSat Conj., % of Total, Projected TVs, % of Total
+Super_Affine_Set   , 2, 50, NA, NA, 
+Domain_Specific    , 0, 0, NA, NA, 
+Monotonicity       , 0, 0, NA, NA, 
+Projection         , 0, 0, 10, 31
+Simplification     , 0, 0, 10, 31
+
+
+---- CSR Incoplete Cholesky 0:
+
+Number of cunjunctions: 12
+Number of iterators: 96
+
+Name of method     , UnSat Conj., % of Total, Projected TVs, % of Total
+Super_Affine_Set   , 0, 0, NA, NA, 
+Domain_Specific    , 0, 0, NA, NA, 
+Monotonicity       , 8, 66, NA, NA, 
+Projection         , 0, 0, 0, 0
+Simplification     , 0, 0, 0, 0
+
+
+---- CSC Gaxpy:
+
+Number of cunjunctions: 2
+Number of iterators: 8
+
+Name of method     , UnSat Conj., % of Total, Projected TVs, % of Total
+Super_Affine_Set   , 0, 0, NA, NA, 
+Domain_Specific    , 0, 0, NA, NA, 
+Monotonicity       , 0, 0, NA, NA, 
+Projection         , 0, 0, 0, 0
+Simplification     , 0, 0, 0, 0
+
+
+---- partial leftLU with fill-in:
+
+Number of cunjunctions: 4
+Number of iterators: 32
+
+Name of method     , UnSat Conj., % of Total, Projected TVs, % of Total
+Super_Affine_Set   , 1, 25, NA, NA, 
+Domain_Specific    , 0, 0, NA, NA, 
+Monotonicity       , 0, 0, NA, NA, 
+Projection         , 0, 0, 12, 37
+Simplification     , 0, 0, 12, 37
+
+
+
+---- Final results:
+
+Number of cunjunctions: 40
+Number of iterators: 304
+
+Name of method     , UnSat Conj., % of Total, Projected TVs, % of Total
+Super_Affine_Set   , 3, 7, NA, NA, 
+Domain_Specific    , 0, 0, NA, NA, 
+Monotonicity       , 18, 45, NA, NA, 
+Projection         , 0, 0, 24, 7
+Simplification     , 10, 25, 48, 15
+
+

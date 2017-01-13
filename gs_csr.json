@@ -38,7 +38,7 @@
                   "two distinct conjunctions considering the ordering of accesses",
                   "(Flow and Anti dependence). Overall, there are 2 distinct",
                   "conjunctions for the complete dependence relation.",
-                  "for (i=0; i < N; i++) {",
+                  "for (i=0; i < m; i++) {",
                   "  for (j=rowptr[i];j<rowptr[i + 1];j++) {",
                   "S1:  y[i] -= values[j]*y[colidx[j]];",
                   "  }",

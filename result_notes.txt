@@ -1,0 +1,119 @@
+
+
+---- CSR_Gauss-Seidel:
+
+  Projected 1 TVs from relation 0: Projection
+  Projected 1 TVs from relation 0: Simplification
+  Projected 1 TVs from relation 1: Projection
+  Projected 1 TVs from relation 1: Simplification
+
+
+---- CSR_ILU:
+
+  The relation 0 is unsat: Monotonicity
+  Projected 0 TVs from relation 0: Projection
+  The relation 0 is unsat: Simplification
+  The relation 1 is unsat: Monotonicity
+  Projected 0 TVs from relation 1: Projection
+  The relation 1 is unsat: Simplification
+  The relation 2 is unsat: Monotonicity
+  Projected 0 TVs from relation 2: Projection
+  The relation 2 is unsat: Simplification
+  The relation 3 is unsat: Monotonicity
+  Projected 0 TVs from relation 3: Projection
+  The relation 3 is unsat: Simplification
+  The relation 4 is unsat: Monotonicity
+  Projected 0 TVs from relation 4: Projection
+  The relation 4 is unsat: Simplification
+  The relation 5 is unsat: Monotonicity
+  Projected 0 TVs from relation 5: Projection
+  The relation 5 is unsat: Simplification
+  Projected 0 TVs from relation 6: Projection
+  Projected 4 TVs from relation 6: Simplification
+  Projected 0 TVs from relation 7: Projection
+  Projected 4 TVs from relation 7: Simplification
+  Projected 0 TVs from relation 8: Projection
+  Projected 4 TVs from relation 8: Simplification
+  Projected 0 TVs from relation 9: Projection
+  Projected 4 TVs from relation 9: Simplification
+  The relation 10 is unsat: Monotonicity
+  Projected 0 TVs from relation 10: Projection
+  The relation 10 is unsat: Simplification
+  The relation 11 is unsat: Monotonicity
+  Projected 0 TVs from relation 11: Projection
+  The relation 11 is unsat: Simplification
+  The relation 12 is unsat: Monotonicity
+  Projected 0 TVs from relation 12: Projection
+  The relation 12 is unsat: Simplification
+  The relation 13 is unsat: Monotonicity
+  Projected 0 TVs from relation 13: Projection
+  The relation 13 is unsat: Simplification
+  Projected 0 TVs from relation 14: Projection
+  Projected 4 TVs from relation 14: Simplification
+  Projected 0 TVs from relation 15: Projection
+  Projected 4 TVs from relation 15: Simplification
+
+
+---- BCSR_Gauss-Seidel:
+
+  The relation 0 is unsat: Super_Affine_Set
+  The relation 1 is unsat: Super_Affine_Set
+  Projected 5 TVs from relation 2: Projection
+  Projected 5 TVs from relation 2: Simplification
+  Projected 5 TVs from relation 3: Projection
+  Projected 5 TVs from relation 3: Simplification
+
+
+---- CSR Incoplete Cholesky 0:
+
+  The relation 0 is unsat: Monotonicity
+  Projected 0 TVs from relation 0: Projection
+  Projected 0 TVs from relation 0: Simplification
+  The relation 1 is unsat: Monotonicity
+  Projected 0 TVs from relation 1: Projection
+  Projected 0 TVs from relation 1: Simplification
+  Projected 0 TVs from relation 2: Projection
+  Projected 0 TVs from relation 2: Simplification
+  Projected 0 TVs from relation 3: Projection
+  Projected 0 TVs from relation 3: Simplification
+  The relation 4 is unsat: Monotonicity
+  Projected 0 TVs from relation 4: Projection
+  Projected 0 TVs from relation 4: Simplification
+  The relation 5 is unsat: Monotonicity
+  Projected 0 TVs from relation 5: Projection
+  Projected 0 TVs from relation 5: Simplification
+  The relation 6 is unsat: Monotonicity
+  Projected 0 TVs from relation 6: Projection
+  Projected 0 TVs from relation 6: Simplification
+  The relation 7 is unsat: Monotonicity
+  Projected 0 TVs from relation 7: Projection
+  Projected 0 TVs from relation 7: Simplification
+  Projected 0 TVs from relation 8: Projection
+  Projected 0 TVs from relation 8: Simplification
+  Projected 0 TVs from relation 9: Projection
+  Projected 0 TVs from relation 9: Simplification
+  The relation 10 is unsat: Monotonicity
+  Projected 0 TVs from relation 10: Projection
+  Projected 0 TVs from relation 10: Simplification
+  The relation 11 is unsat: Monotonicity
+  Projected 0 TVs from relation 11: Projection
+  Projected 0 TVs from relation 11: Simplification
+
+
+---- CSC Gaxpy:
+
+  Projected 0 TVs from relation 0: Projection
+  Projected 0 TVs from relation 0: Simplification
+  Projected 0 TVs from relation 1: Projection
+  Projected 0 TVs from relation 1: Simplification
+
+
+---- partial leftLU with fill-in:
+
+  Projected 4 TVs from relation 0: Projection
+  Projected 4 TVs from relation 0: Simplification
+  Projected 4 TVs from relation 1: Projection
+  Projected 4 TVs from relation 1: Simplification
+  Projected 4 TVs from relation 2: Projection
+  Projected 4 TVs from relation 2: Simplification
+  The relation 3 is unsat: Super_Affine_Set
