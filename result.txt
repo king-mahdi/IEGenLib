@@ -1,92 +1,52 @@
+Glossary:
+
+CA = Conjunctions available to determing satisfiability by this method
+CU = Number of  Conjunctions determined as unsatisfiable
+P  = Percentage of unsatisfiable conjunctions of available ones
+IA = Iterators available to determing satisfiability by this method
+IP = Number of  projected iterators
+P  = Percentage of projected iterators of available ones
+
 ---- CSR_Gauss-Seidel:
 
-Number of cunjunctions: 2
-Number of iterators: 8
-
-Name of method     , UnSat Conj., % of Total, Projected TVs, % of Total
-Super_Affine_Set   , 0, 0, NA, NA, 
-Domain_Specific    , 0, 0, NA, NA, 
-Monotonicity       , 0, 0, NA, NA, 
-Projection         , 0, 0, 2, 25
-Simplification     , 0, 0, 2, 25
+Name of method     | CA | CU | P | IA | IP | P
+Super_Affine_Set   | 2 | 0 | 0 | NA | NA | NA | 
+Domain_Specific    | 2 | 0 | 0 | NA | NA | NA | 
+Monotonicity       | 2 | 0 | 0 | NA | NA | NA | 
+DS_And_Mon         | 2 | 0 | 0 | NA | NA | NA | 
+Projection         | 2 | 0 | 0 | 4 | 2 | 50 |
+Simplification     | 2 | 0 | 0 | 4 | 2 | 50 |
 
 
 ---- CSR_ILU:
 
-Number of cunjunctions: 16
-Number of iterators: 128
-
-Name of method     , UnSat Conj., % of Total, Projected TVs, % of Total
-Super_Affine_Set   , 0, 0, NA, NA, 
-Domain_Specific    , 0, 0, NA, NA, 
-Monotonicity       , 10, 62, NA, NA, 
-Projection         , 0, 0, 0, 0
-Simplification     , 10, 62, 24, 18
-
-
----- BCSR_Gauss-Seidel:
-
-Number of cunjunctions: 4
-Number of iterators: 32
-
-Name of method     , UnSat Conj., % of Total, Projected TVs, % of Total
-Super_Affine_Set   , 2, 50, NA, NA, 
-Domain_Specific    , 0, 0, NA, NA, 
-Monotonicity       , 0, 0, NA, NA, 
-Projection         , 0, 0, 10, 31
-Simplification     , 0, 0, 10, 31
+Name of method     | CA | CU | P | IA | IP | P
+Super_Affine_Set   | 16 | 0 | 0 | NA | NA | NA | 
+Domain_Specific    | 16 | 0 | 0 | NA | NA | NA | 
+Monotonicity       | 16 | 12 | 75 | NA | NA | NA | 
+DS_And_Mon         | 16 | 10 | 62 | NA | NA | NA | 
+Projection         | 16 | 0 | 0 | 96 | 0 | 0 |
+Simplification     | 16 | 12 | 75 | 96 | 16 | 16 |
 
 
 ---- CSR Incoplete Cholesky 0:
 
-Number of cunjunctions: 12
-Number of iterators: 96
-
-Name of method     , UnSat Conj., % of Total, Projected TVs, % of Total
-Super_Affine_Set   , 0, 0, NA, NA, 
-Domain_Specific    , 0, 0, NA, NA, 
-Monotonicity       , 8, 66, NA, NA, 
-Projection         , 0, 0, 0, 0
-Simplification     , 0, 0, 0, 0
-
-
----- CSC Gaxpy:
-
-Number of cunjunctions: 2
-Number of iterators: 8
-
-Name of method     , UnSat Conj., % of Total, Projected TVs, % of Total
-Super_Affine_Set   , 0, 0, NA, NA, 
-Domain_Specific    , 0, 0, NA, NA, 
-Monotonicity       , 0, 0, NA, NA, 
-Projection         , 0, 0, 0, 0
-Simplification     , 0, 0, 0, 0
-
-
----- partial leftLU with fill-in:
-
-Number of cunjunctions: 4
-Number of iterators: 32
-
-Name of method     , UnSat Conj., % of Total, Projected TVs, % of Total
-Super_Affine_Set   , 1, 25, NA, NA, 
-Domain_Specific    , 0, 0, NA, NA, 
-Monotonicity       , 0, 0, NA, NA, 
-Projection         , 0, 0, 12, 37
-Simplification     , 0, 0, 12, 37
+Name of method     | CA | CU | P | IA | IP | P
+Super_Affine_Set   | 12 | 0 | 0 | NA | NA | NA | 
+Domain_Specific    | 12 | 0 | 0 | NA | NA | NA | 
+Monotonicity       | 12 | 8 | 66 | NA | NA | NA | 
+DS_And_Mon         | 12 | 8 | 66 | NA | NA | NA | 
+Projection         | 12 | 0 | 0 | 72 | 0 | 0 |
+Simplification     | 12 | 8 | 66 | 72 | 0 | 0 |
 
 
 
 ---- Final results:
 
-Number of cunjunctions: 40
-Number of iterators: 304
-
-Name of method     , UnSat Conj., % of Total, Projected TVs, % of Total
-Super_Affine_Set   , 3, 7, NA, NA, 
-Domain_Specific    , 0, 0, NA, NA, 
-Monotonicity       , 18, 45, NA, NA, 
-Projection         , 0, 0, 24, 7
-Simplification     , 10, 25, 48, 15
-
-
+Name of method     | CA | CU | P | IA | IP | P
+Super_Affine_Set   | 30 | 0 | 0 | NA | NA | NA | 
+Domain_Specific    | 30 | 0 | 0 | NA | NA | NA | 
+Monotonicity       | 30 | 20 | 66 | NA | NA | NA | 
+DS_And_Mon         | 30 | 18 | 60 | NA | NA | NA | 
+Projection         | 30 | 0 | 0 | 172 | 2 | 1
+Simplification     | 30 | 20 | 66 | 172 | 18 | 10

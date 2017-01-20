@@ -1,7 +1,4 @@
 gs_csr.json
 ilu_csr.json
-gs_bcsr.json
 ic0_csr.json
-gaxpy_csc.json
-partialLeftLU_csc.json
 

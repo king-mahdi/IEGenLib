@@ -60,12 +60,11 @@
 #include "parser/jsoncons/json.hpp"
 
 using jsoncons::json;
+using iegenlib::Exp;
+using iegenlib::Conjunction;
 using iegenlib::Set;
 using iegenlib::Relation;
 using namespace std;
-
-std::ofstream rout("result.txt", std::ofstream::out);
-std::ofstream rnout("result_notes.txt", std::ofstream::out);
 
 #define n_combo 10
 enum methods {
@@ -73,34 +72,29 @@ enum methods {
   Approximation,
   Domain_Specific,
   Monotonicity,
+  DS_And_Mon,
   Projection,
   Simplification
 };
 enum result {
+  conj,
   Unsat,
+  nit,
   Projected
 };
 
-string method_name(int m)
-{
-  if( m == Approximation)  return string("Approximation");
-  else if( m == Domain_Specific)  return string("Domain_Specific");
-  else if( m == Monotonicity)  return string("Monotonicity");
-  else if( m == Super_Affine_Set)  return string("Super_Affine_Set");
-  else if( m == Projection)  return string("Projection");
-  else if( m == Simplification)  return string("Simplification");
-
-  return string("Not Specified");
-}
-
-int res_tot[n_combo][2];
-int n_t_conjs;
-int n_t_iters;
-
-void simplify(string inputFile);
+int res_tot[n_combo][4];
+std::ofstream rout("result.txt", std::ofstream::out);
+std::ofstream rnout("result_notes.txt", std::ofstream::out);
+void eval(string inputFile);
 
 // Utility function
+void printSE(std::set<Exp> se, iegenlib::TupleDecl td);
+void printSETF(string msg, std::set<Exp> se, iegenlib::TupleDecl td);
+std::set<Exp> constDiff(Conjunction* conjB, Conjunction* conjA);
+string method_name(int m);
 bool printRelation(string msg, Relation *rel);
+bool printRelationTF(string msg, Relation *rel);
 void EXPECT_EQ(string a, string b);
 void EXPECT_EQ(Relation *a, Relation *b);
 int str2int(string str);
@@ -114,50 +108,57 @@ int main(int argc, char **argv)
     cout<<"\n\nYou need to specify the input file containing name of input JSON files:"
           "\n./simplifyDriver eval.list\n\n";
   } else {
-     
+
+    rout<<"Glossary:"<<"\n\n";
+    rout<<"CA = Conjunctions available to determing satisfiability by this method\n"
+        <<"CU = Number of  Conjunctions determined as unsatisfiable\n"
+        <<"P  = Percentage of unsatisfiable conjunctions of available ones\n"
+        <<"IA = Iterators available to determing satisfiability by this method\n"
+        <<"IP = Number of  projected iterators\n"
+        <<"P  = Percentage of projected iterators of available ones\n\n";
+
     ifstream in(argv[1]);
-    
     while(in>>jname){
-      simplify(string( jname ));
+      eval(string( jname ));
     }
   }
 
+  double ac,uc,ai,ui;
   rout<<"\n---- Final results:"<<"\n\n";
-  rout<<"Number of cunjunctions: "<<n_t_conjs<<"\n";
-  rout<<"Number of iterators: "<<n_t_iters<<"\n\n";
-  rout<<"Name of method     , UnSat Conj., % of Total, Projected TVs, % of Total"<<"\n";
-  rout<<"Super_Affine_Set   , "<<res_tot[Super_Affine_Set][Unsat]<<", "
-      <<(int)(((double)res_tot[Super_Affine_Set][Unsat]/(double)n_t_conjs)*100)<<", "
-      <<"NA, " //<<res_tot[Super_Affine_Set][Projected]<<", "
-      <<"NA, " //<<(int)(((double)res_tot[Super_Affine_Set][Projected]/(double)n_t_iters)*100)
-      <<"\n";
-  rout<<"Domain_Specific    , "<<res_tot[Domain_Specific][Unsat]<<", "
-      <<(int)(((double)res_tot[Domain_Specific][Unsat]/(double)n_t_conjs)*100)<<", "
-      <<"NA, " //<<res_tot[Domain_Specific][Projected]<<", "
-      <<"NA, " //<<(int)(((double)res_tot[Domain_Specific][Projected]/(double)n_t_iters)*100)
-      <<"\n";
-  rout<<"Monotonicity       , "<<res_tot[Monotonicity][Unsat]<<", "
-      <<(int)(((double)res_tot[Monotonicity][Unsat]/(double)n_t_conjs)*100)<<", "
-      <<"NA, " //<<res_tot[Monotonicity][Projected]<<", "
-      <<"NA, " //<<(int)(((double)res_tot[Monotonicity][Projected]/(double)n_t_iters)*100)
-      <<"\n";
-  rout<<"Projection         , "<<res_tot[Projection][Unsat]<<", "
-      <<(int)(((double)res_tot[Projection][Unsat]/(double)n_t_conjs)*100)<<", "
-      <<res_tot[Projection][Projected]<<", "
-      <<(int)(((double)res_tot[Projection][Projected]/(double)n_t_iters)*100)
-      <<"\n";
-  rout<<"Simplification     , "<<res_tot[Simplification][Unsat]<<", "
-      <<(int)(((double)res_tot[Simplification][Unsat]/(double)n_t_conjs)*100)<<", "
-      <<res_tot[Simplification][Projected]<<", "
-      <<(int)(((double)res_tot[Simplification][Projected]/(double)n_t_iters)*100)
-      <<"\n\n\n";
+  rout<<"Name of method     | CA | CU | P | IA | IP | P\n";
 
-    return 0;
+  ac = res_tot[Super_Affine_Set][conj]; uc = res_tot[Super_Affine_Set][Unsat];
+  rout<<"Super_Affine_Set   | "<<ac<<" | "<<uc<<" | "<<(int)((uc/ac)*100)<<" | "
+      <<"NA | "<<"NA | "<<"NA | "<<"\n";
+
+  ac = res_tot[Domain_Specific][conj]; uc = res_tot[Domain_Specific][Unsat];
+  rout<<"Domain_Specific    | "<<ac<<" | "<<uc<<" | "<<(int)((uc/ac)*100)<<" | "
+      <<"NA | "<<"NA | "<<"NA | "<<"\n";
+
+  ac = res_tot[Monotonicity][conj]; uc = res_tot[Monotonicity][Unsat];
+  rout<<"Monotonicity       | "<<ac<<" | "<<uc<<" | "<<(int)((uc/ac)*100)<<" | "
+      <<"NA | "<<"NA | "<<"NA | "<<"\n";
+
+    ac = res_tot[DS_And_Mon][conj]; uc = res_tot[DS_And_Mon][Unsat];
+    rout<<"DS_And_Mon         | "<<ac<<" | "<<uc<<" | "<<(int)((uc/ac)*100)<<" | "
+        <<"NA | "<<"NA | "<<"NA | "<<"\n";
+
+  ac = res_tot[Projection][conj]; uc = res_tot[Projection][Unsat];
+  ai = res_tot[Projection][nit]; ui = res_tot[Projection][Projected];
+  rout<<"Projection         | "<<ac<<" | "<<uc<<" | "<<(int)((uc/ac)*100)<<" | "
+      <<ai<<" | "<<ui<<" | "<<(int)((ui/ai)*100)<<"\n";
+
+  ac = res_tot[Simplification][conj]; uc = res_tot[Simplification][Unsat];
+  ai = res_tot[Simplification][nit]; ui = res_tot[Simplification][Projected];
+  rout<<"Simplification     | "<<ac<<" | "<<uc<<" | "<<(int)((uc/ac)*100)<<" | "
+      <<ai<<" | "<<ui<<" | "<<(int)((ui/ai)*100)<<"\n";
+
+  return 0;
 }
 
 // Reads information from a JSON file (inputFile), and applies
 // the simplification algorithm to the sets found in the file. 
-void simplify(string inputFile)
+void eval(string inputFile)
 {
   iegenlib::setCurrEnv();
   std::set<int> parallelTvs;
@@ -169,18 +170,16 @@ void simplify(string inputFile)
 
   for(size_t p = 0; p < data.size(); ++p){    // Dependence relations (DR) found in the file
 
-    int res_c[n_combo][2] = {0};
+    std::set<Exp> addConst;
+    int res_c[n_combo][4] = {0};
     int n_c_conjs = 0;
-    int n_c_iters = 0;
-
     n_c_conjs += data[p].size();
-    n_t_conjs += data[p].size();
-
 
     rnout<<"\n\n---- "<<data[p][0]["Name"].as<string>()<<":\n\n";
 
     for (size_t i = 0; i < data[p].size(); ++i){// Conjunctions found for one DR in the file
 
+      int n_c_iters = 0;
       bool UNS = false;
 
       // (1) Introduce the uninterpreted function symbols to environment, and 
@@ -208,21 +207,19 @@ void simplify(string inputFile)
               bijective,                                              // Bijective?
               monotonicity                                            // Monotonicity?
                                   );
-        }  
+        }
       }
 
       // (2) Putting constraints in an iegenlib::Relation
       Relation* rel = new Relation(data[p][i]["Relation"].as<string>());
 
+      char msg[100];
+      sprintf(msg, "@@@ Conjunction No. %d: ", int(i) );
+      printRelationTF( string(msg) , rel);
+
       Relation* rel_copy = new Relation( rel->inArity() , rel->outArity() );
       *rel_copy = *rel;
 
-      int orig_arity = rel->arity();
-      int new_arity = rel->arity();
-
-      n_c_iters += rel->arity();
-      n_t_iters += rel->arity();
-      
       // (3) Specify loops that are going to be parallelized, 
       //     so we are not going to project them out.
       if( i == 0 ){  // Read these data only once. 
@@ -242,16 +239,25 @@ void simplify(string inputFile)
         }
       }
 
+      n_c_iters += rel->arity();
+      n_c_iters -= parallelTvs.size();
+
 
       //################# Testing Super_Affine_Set #################
-      rel_copy->normalize();
-     
+      res_c[Super_Affine_Set][conj]++;
+      res_tot[Super_Affine_Set][conj]++;
+
+      addConst = rel_copy->boundDomainRange();
+
+//printRelationTF(string("@@@ Conjunction with Domain an Range constraints: ") , rel_copy);
+//printSETF(string("@@@ Added constraints by Super Affine Set: ") , addConst, rel->getTupleDecl());
+
       if( rel_copy->isDefault()) {
         res_c[Super_Affine_Set][Unsat]++;
         res_tot[Super_Affine_Set][Unsat]++;
         UNS = true;
 
-        rnout<<"  The relation "<<i<<" is unsat: Super_Affine_Set"<<"\n";
+        rnout<<"\n### The relation "<<i<<" is unsat: Super_Affine_Set"<<"\n";
       }
       else {
         //find # of new founded equalities;
@@ -264,8 +270,15 @@ void simplify(string inputFile)
       //################# Testing domain specific information #################
       if( ! UNS ){  //Right now only testing if Super_Affine_Set
                     // has not already determined unsatisfiabiltiy
+        res_c[Domain_Specific][conj]++;
+        res_tot[Domain_Specific][conj]++;
+
         *rel_copy = *rel;
         Relation *rel_extend;
+
+        // Doing Super Affine Set before adding domain specific constraints
+        rel_copy->normalize();
+
         for (size_t j = 0; j < data[p][0]["User Defined"].size(); ++j){
    
           rel_extend = rel_copy->addUFConstraints(
@@ -277,12 +290,16 @@ void simplify(string inputFile)
           delete rel_extend;
         }
 
+//addConst = constDiff( rel_copy->mConjunctions.front() , rel->mConjunctions.front() );
+//printRelationTF(string("@@@ Conjunction with Domain Specific constraints: ") , rel_copy);
+//printSETF(string("@@@ Added constraints by Domain Specific: ") , addConst, rel->getTupleDecl());
+
         rel_copy->normalize();
         if( rel_copy->isDefault()) {
           res_c[Domain_Specific][Unsat]++;
           res_tot[Domain_Specific][Unsat]++;
 
-          rnout<<"  The relation "<<i<<" is unsat: Domain_Specific"<<"\n";
+          rnout<<"\n### The relation "<<i<<" is unsat: Domain_Specific"<<"\n";
         }
         else {
           //find # of new founded equalities;
@@ -293,9 +310,15 @@ void simplify(string inputFile)
       //################# Testing Monotonicity #################
       if( ! UNS ){  // Right now only testing if Super_Affine_Set
                     // has not already determined unsatisfiabiltiy
+        res_c[Monotonicity][conj]++;
+        res_tot[Monotonicity][conj]++;
+
         *rel_copy = *rel;
         Relation *rel_extend;
-        rel_copy->normalize();
+
+        // Doing Super Affine Set before adding domain specific constraints
+        //rel_copy->normalize();
+
         rel_extend = rel_copy->addConstraintsDueToMonotonicity();
         *rel_copy = *rel_extend;
         delete rel_extend;
@@ -306,7 +329,48 @@ void simplify(string inputFile)
           res_c[Monotonicity][Unsat]++;
           res_tot[Monotonicity][Unsat]++;
 
-          rnout<<"  The relation "<<i<<" is unsat: Monotonicity"<<"\n";
+          rnout<<"\n### The relation "<<i<<" is unsat: Monotonicity"<<"\n";
+        }
+        else {
+          //find # of new founded equalities;
+        } 
+      }
+
+
+      //################# Testing DS_And_Mon    #################
+      if( ! UNS ){  // Right now only testing if Super_Affine_Set
+                    // has not already determined unsatisfiabiltiy
+        res_c[DS_And_Mon][conj]++;
+        res_tot[DS_And_Mon][conj]++;
+
+        *rel_copy = *rel;
+        Relation *rel_extend;
+
+        // Doing Super Affine Set before adding domain specific constraints
+        rel_copy->normalize();
+
+        for (size_t j = 0; j < data[p][0]["User Defined"].size(); ++j){
+   
+          rel_extend = rel_copy->addUFConstraints(
+                        data[p][0]["User Defined"][j]["Func1"].as<string>(),
+                        data[p][0]["User Defined"][j]["operator"].as<string>(),
+                        data[p][0]["User Defined"][j]["Func2"].as<string>()
+                                              );
+          *rel_copy = *rel_extend;
+          delete rel_extend;
+        }
+
+        rel_extend = rel_copy->addConstraintsDueToMonotonicity();
+        *rel_copy = *rel_extend;
+        delete rel_extend;
+
+        rel_copy->normalize();
+        if( rel_copy->isDefault()) {
+
+          res_c[DS_And_Mon][Unsat]++;
+          res_tot[DS_And_Mon][Unsat]++;
+
+          rnout<<"\n### The relation "<<i<<" is unsat: DS_And_Mon"<<"\n";
         }
         else {
           //find # of new founded equalities;
@@ -317,6 +381,11 @@ void simplify(string inputFile)
       //################# Testing Projection #################
       if( ! UNS ){  // Right now only testing if Super_Affine_Set
                     // has not already determined unsatisfiabiltiy
+        // Keeping track of available iterators for projection
+        res_c[Projection][conj]++;
+        res_tot[Projection][conj]++;
+        res_c[Projection][nit] += n_c_iters;
+        res_tot[Projection][nit] += n_c_iters;
 
         Relation *temp;
         int lastTV = rel->arity()-1;
@@ -344,20 +413,25 @@ void simplify(string inputFile)
           res_c[Projection][Unsat]++;
           res_tot[Projection][Unsat]++;
 
-          rnout<<"  The relation "<<i<<" is unsat: Projection"<<"\n";
+          rnout<<"\n### The relation "<<i<<" is unsat: Projection"<<"\n";
         }
         else {
           int pr = rel->arity() - rel_copy->arity();
           res_c[Projection][Projected] += pr;
           res_tot[Projection][Projected] += pr;
 
-          rnout<<"  Projected "<<pr<<" TVs from relation "<<i<<": Projection"<<"\n";
+          rnout<<"\n### Projected "<<pr<<" TVs from relation "<<i<<": Projection"<<"\n";
         } 
       }
 
       //################# Testing simplifyForPartialParallel #################
       if( ! UNS ){  // Right now only testing if Super_Affine_Set
                     // has not already determined unsatisfiabiltiy
+        res_c[Simplification][conj]++;
+        res_tot[Simplification][conj]++;
+        res_c[Simplification][nit] += n_c_iters;
+        res_tot[Simplification][nit] += n_c_iters;
+
         // Applying heuristic for removing expensive iterators
         int numConstToRemove = str2int(data[p][0]["Remove Constraints"].as<string>());
         rel->RemoveExpensiveConsts(parallelTvs, numConstToRemove );
@@ -379,59 +453,59 @@ void simplify(string inputFile)
 
         rel_copy = rel->simplifyForPartialParallel(parallelTvs);
 
-        //if( rel_copy ) 
-          //rel_copy->normalize();
+        if( rel_copy ) 
+          rel_copy->normalize();
 
 //if( inputFile == string("ilu_csr.json") && (i == 6 || i == 7) )
   //printRelation(string("Norm 6/7: ") , rel_copy);
 
-        if( !rel_copy ){ //|| rel_copy->isDefault() ) {
+        if( !rel_copy || rel_copy->isDefault() ) {
           res_c[Simplification][Unsat]++;
           res_tot[Simplification][Unsat]++;
 
-          rnout<<"  The relation "<<i<<" is unsat: Simplification"<<"\n";
+          rnout<<"\n### The relation "<<i<<" is unsat: Simplification"<<"\n";
         }
         else {
           int pr = rel->arity() - rel_copy->arity();
           res_c[Simplification][Projected] += pr;
           res_tot[Simplification][Projected] += pr;
 
-          rnout<<"  Projected "<<pr<<" TVs from relation "<<i<<": Simplification"<<"\n";
+          rnout<<"\n### Projected "<<pr<<" TVs from relation "<<i<<": Simplification"<<"\n";
         } 
       }
 
       delete rel;
     }
 
+    double ac,uc,ai,ui;
     rout<<"---- "<<data[p][0]["Name"].as<string>()<<":\n\n";
-    rout<<"Number of cunjunctions: "<<n_c_conjs<<"\n";
-    rout<<"Number of iterators: "<<n_c_iters<<"\n\n";
-    rout<<"Name of method     , UnSat Conj., % of Total, Projected TVs, % of Total"<<"\n";
-    rout<<"Super_Affine_Set   , "<<res_c[Super_Affine_Set][Unsat]<<", "
-        <<(int)(((double)res_c[Super_Affine_Set][Unsat]/(double)n_c_conjs)*100)<<", "
-        <<"NA, " //<<res_c[Super_Affine_Set][Projected]<<", "
-        <<"NA, " //<<(int)(((double)res_c[Super_Affine_Set][Projected]/(double)n_c_iters)*100)
-        <<"\n";
-    rout<<"Domain_Specific    , "<<res_c[Domain_Specific][Unsat]<<", "
-        <<(int)(((double)res_c[Domain_Specific][Unsat]/(double)n_c_conjs)*100)<<", "
-        <<"NA, " //<<res_c[Domain_Specific][Projected]<<", "
-        <<"NA, " //<<(int)(((double)res_c[Domain_Specific][Projected]/(double)n_c_iters)*100)
-        <<"\n";
-    rout<<"Monotonicity       , "<<res_c[Monotonicity][Unsat]<<", "
-        <<(int)(((double)res_c[Monotonicity][Unsat]/(double)n_c_conjs)*100)<<", "
-        <<"NA, " //<<res_c[Monotonicity][Projected]<<", "
-        <<"NA, " //<<(int)(((double)res_c[Monotonicity][Projected]/(double)n_c_iters)*100)
-        <<"\n";
-    rout<<"Projection         , "<<res_c[Projection][Unsat]<<", "
-        <<(int)(((double)res_c[Projection][Unsat]/(double)n_c_conjs)*100)<<", "
-        <<res_c[Projection][Projected]<<", "
-        <<(int)(((double)res_c[Projection][Projected]/(double)n_c_iters)*100)
-        <<"\n";
-    rout<<"Simplification     , "<<res_c[Simplification][Unsat]<<", "
-        <<(int)(((double)res_c[Simplification][Unsat]/(double)n_c_conjs)*100)<<", "
-        <<res_c[Simplification][Projected]<<", "
-        <<(int)(((double)res_c[Simplification][Projected]/(double)n_c_iters)*100)
-        <<"\n";
+    rout<<"Name of method     | CA | CU | P | IA | IP | P\n";
+
+    ac = res_c[Super_Affine_Set][conj]; uc = res_c[Super_Affine_Set][Unsat];
+    rout<<"Super_Affine_Set   | "<<ac<<" | "<<uc<<" | "<<(int)((uc/ac)*100)<<" | "
+        <<"NA | "<<"NA | "<<"NA | "<<"\n";
+
+    ac = res_c[Domain_Specific][conj]; uc = res_c[Domain_Specific][Unsat];
+    rout<<"Domain_Specific    | "<<ac<<" | "<<uc<<" | "<<(int)((uc/ac)*100)<<" | "
+        <<"NA | "<<"NA | "<<"NA | "<<"\n";
+
+    ac = res_c[Monotonicity][conj]; uc = res_c[Monotonicity][Unsat];
+    rout<<"Monotonicity       | "<<ac<<" | "<<uc<<" | "<<(int)((uc/ac)*100)<<" | "
+        <<"NA | "<<"NA | "<<"NA | "<<"\n";
+
+    ac = res_c[DS_And_Mon][conj]; uc = res_c[DS_And_Mon][Unsat];
+    rout<<"DS_And_Mon         | "<<ac<<" | "<<uc<<" | "<<(int)((uc/ac)*100)<<" | "
+        <<"NA | "<<"NA | "<<"NA | "<<"\n";
+
+    ac = res_c[Projection][conj]; uc = res_c[Projection][Unsat];
+    ai = res_c[Projection][nit]; ui = res_c[Projection][Projected];
+    rout<<"Projection         | "<<ac<<" | "<<uc<<" | "<<(int)((uc/ac)*100)<<" | "
+        <<ai<<" | "<<ui<<" | "<<(int)((ui/ai)*100)<<" |\n";
+
+    ac = res_c[Simplification][conj]; uc = res_c[Simplification][Unsat];
+    ai = res_c[Simplification][nit]; ui = res_c[Simplification][Projected];
+    rout<<"Simplification     | "<<ac<<" | "<<uc<<" | "<<(int)((uc/ac)*100)<<" | "
+        <<ai<<" | "<<ui<<" | "<<(int)((ui/ai)*100)<<" |\n";
     rout<<"\n\n";
 
 
@@ -439,10 +513,92 @@ void simplify(string inputFile)
 
 }
 
+std::set<Exp> constDiff(Conjunction* conjB, Conjunction* conjA){
 
+  std::set<Exp> diffSet;
 
+  const std::list<Exp*> eqB = conjB->equalities();
+  const std::list<Exp*> ineqB = conjB->inequalities();
+  const std::list<Exp*> eqA = conjA->equalities();
+  const std::list<Exp*> ineqA = conjA->inequalities();
 
+  int found = 0;
+  for (std::list<Exp*>::const_iterator it=eqB.begin(); it != eqB.end(); it++){
+    found = 0;
+    for (std::list<Exp*>::const_iterator jt=eqA.begin(); jt != eqA.end(); jt++){
+      if( (*(*it)) == (*(*jt)) ){ 
+        found = 1;
+        break;
+      }
+    }
+    if(!found){
+      diffSet.insert( *(*it) );
+    }  
+  }
 
+  for (std::list<Exp*>::const_iterator it=ineqB.begin(); it != ineqB.end(); it++){
+    found = 0;
+    for (std::list<Exp*>::const_iterator jt=ineqA.begin(); jt != ineqA.end(); jt++){
+      if( (*(*it)) == (*(*jt)) ){ 
+        found = 1;
+        break;
+      }
+    }
+    if(!found){
+      diffSet.insert( *(*it) );
+    }  
+  }
+
+//if ( diffSet.begin() == diffSet.end() ) std::cout<<"\n\nSet is empty!!!\n\n";
+
+  return diffSet;
+}
+
+void printSE(std::set<Exp> se, iegenlib::TupleDecl td){
+
+  std::cout<<"\n";
+  for (std::set<Exp>::iterator it=se.begin(); it!=se.end(); it++)
+    std::cout<<(*it).prettyPrintString( td )<<" && ";
+  std::cout<<"\n";
+}
+
+void printSETF(string msg, std::set<Exp> se, iegenlib::TupleDecl td){
+
+  rnout<<"\n"<<msg<<" { ";
+  for (std::set<Exp>::iterator it=se.begin(); it!=se.end(); it++){
+    rnout<<(*it).prettyPrintString( td ); //.toString();
+    Exp te = (Exp)(*it);
+    if( te.isEquality() ) rnout<<" = 0 ";
+    else rnout<<" >= 0 ";
+    if( std::next(it) != se.end()) rnout<<" && ";
+  }
+  rnout<<"}\n";
+}
+
+bool printRelationTF(string msg, Relation *rel){
+
+    if ( rel ) {
+
+        rnout<<"\n"<<msg<<rel->toISLString()<<"\n";
+    } else {
+
+        rnout<<"\n"<<msg<<"Not Satisfiable"<<"\n";
+    }
+
+    return true;
+}
+
+string method_name(int m)
+{
+  if( m == Approximation)  return string("Approximation");
+  else if( m == Domain_Specific)  return string("Domain_Specific");
+  else if( m == Monotonicity)  return string("Monotonicity");
+  else if( m == Super_Affine_Set)  return string("Super_Affine_Set");
+  else if( m == Projection)  return string("Projection");
+  else if( m == Simplification)  return string("Simplification");
+
+  return string("Not Specified");
+}
 
 
 bool printRelation(string msg, Relation *rel){

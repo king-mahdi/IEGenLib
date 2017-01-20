@@ -2821,7 +2821,13 @@ Set* Set::addConstraintsDueToMonotonicity() const {
 }
 
 Relation* Relation::addConstraintsDueToMonotonicity() const {
+
+    // Add in constraints due to domain and range.
+    // We always want to do this here because otherwise we don't get
+    // any of the uninterpreted functions as non-negative.
     Relation* retval = new Relation(*this);
+    retval->boundDomainRange();
+
     retval->addConstraintsDueToMonotonicityHelper();
     return retval;
 }

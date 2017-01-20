@@ -2,118 +2,267 @@
 
 ---- CSR_Gauss-Seidel:
 
-  Projected 1 TVs from relation 0: Projection
-  Projected 1 TVs from relation 0: Simplification
-  Projected 1 TVs from relation 1: Projection
-  Projected 1 TVs from relation 1: Simplification
+
+@@@ Conjunction No. 0: [ m ] -> { [i, j] -> [ip, jp] : i - colidx(jp) = 0 && i >= 0 && ip >= 0 && j - rowptr(i) >= 0 && jp - rowptr(ip) >= 0 && -i + ip - 1 >= 0 && -i + m - 1 >= 0 && -j + rowptr(i + 1) - 1 >= 0 && -ip + m - 1 >= 0 && -jp + rowptr(ip + 1) - 1 >= 0 }
+
+### Projected 1 TVs from relation 0: Projection
+
+### Projected 1 TVs from relation 0: Simplification
+
+@@@ Conjunction No. 1: [ m ] -> { [i, j] -> [ip, jp] : i - colidx(jp) = 0 && i >= 0 && ip >= 0 && j - rowptr(i) >= 0 && jp - rowptr(ip) >= 0 && -i + m - 1 >= 0 && i - ip - 1 >= 0 && -j + rowptr(i + 1) - 1 >= 0 && -ip + m - 1 >= 0 && -jp + rowptr(ip + 1) - 1 >= 0 }
+
+### Projected 1 TVs from relation 1: Projection
+
+### Projected 1 TVs from relation 1: Simplification
 
 
 ---- CSR_ILU:
 
-  The relation 0 is unsat: Monotonicity
-  Projected 0 TVs from relation 0: Projection
-  The relation 0 is unsat: Simplification
-  The relation 1 is unsat: Monotonicity
-  Projected 0 TVs from relation 1: Projection
-  The relation 1 is unsat: Simplification
-  The relation 2 is unsat: Monotonicity
-  Projected 0 TVs from relation 2: Projection
-  The relation 2 is unsat: Simplification
-  The relation 3 is unsat: Monotonicity
-  Projected 0 TVs from relation 3: Projection
-  The relation 3 is unsat: Simplification
-  The relation 4 is unsat: Monotonicity
-  Projected 0 TVs from relation 4: Projection
-  The relation 4 is unsat: Simplification
-  The relation 5 is unsat: Monotonicity
-  Projected 0 TVs from relation 5: Projection
-  The relation 5 is unsat: Simplification
-  Projected 0 TVs from relation 6: Projection
-  Projected 4 TVs from relation 6: Simplification
-  Projected 0 TVs from relation 7: Projection
-  Projected 4 TVs from relation 7: Simplification
-  Projected 0 TVs from relation 8: Projection
-  Projected 4 TVs from relation 8: Simplification
-  Projected 0 TVs from relation 9: Projection
-  Projected 4 TVs from relation 9: Simplification
-  The relation 10 is unsat: Monotonicity
-  Projected 0 TVs from relation 10: Projection
-  The relation 10 is unsat: Simplification
-  The relation 11 is unsat: Monotonicity
-  Projected 0 TVs from relation 11: Projection
-  The relation 11 is unsat: Simplification
-  The relation 12 is unsat: Monotonicity
-  Projected 0 TVs from relation 12: Projection
-  The relation 12 is unsat: Simplification
-  The relation 13 is unsat: Monotonicity
-  Projected 0 TVs from relation 13: Projection
-  The relation 13 is unsat: Simplification
-  Projected 0 TVs from relation 14: Projection
-  Projected 4 TVs from relation 14: Simplification
-  Projected 0 TVs from relation 15: Projection
-  Projected 4 TVs from relation 15: Simplification
 
+@@@ Conjunction No. 0: [ m ] -> { [i, k, j1, j2] -> [ip, kp, j1p, j2p] : k - kp = 0 && colidx(j1) - colidx(j2) = 0 && colidx(j1p) - colidx(j2p) = 0 && i >= 0 && ip >= 0 && k - rowptr(i) >= 0 && kp - rowptr(ip) >= 0 && -i + ip - 1 >= 0 && -i + m - 1 >= 0 && -k + j1 - 1 >= 0 && -k + diagptr(i) - 1 >= 0 && -j1 + rowptr(i + 1) - 1 >= 0 && -j2 + rowptr(colidx(k) + 1) - 1 >= 0 && j2 - diagptr(colidx(k)) - 1 >= 0 && -ip + m - 1 >= 0 && -kp + j1p - 1 >= 0 && -kp + diagptr(ip) - 1 >= 0 && -j1p + rowptr(ip + 1) - 1 >= 0 && -j2p + rowptr(colidx(kp) + 1) - 1 >= 0 && j2p - diagptr(colidx(kp)) - 1 >= 0 }
 
----- BCSR_Gauss-Seidel:
+### The relation 0 is unsat: Monotonicity
 
-  The relation 0 is unsat: Super_Affine_Set
-  The relation 1 is unsat: Super_Affine_Set
-  Projected 5 TVs from relation 2: Projection
-  Projected 5 TVs from relation 2: Simplification
-  Projected 5 TVs from relation 3: Projection
-  Projected 5 TVs from relation 3: Simplification
+### The relation 0 is unsat: DS_And_Mon
+
+### Projected 0 TVs from relation 0: Projection
+
+### The relation 0 is unsat: Simplification
+
+@@@ Conjunction No. 1: [ m ] -> { [i, k, j1, j2] -> [ip, kp, j1p, j2p] : k - kp = 0 && colidx(j1) - colidx(j2) = 0 && colidx(j1p) - colidx(j2p) = 0 && i >= 0 && ip >= 0 && k - rowptr(i) >= 0 && kp - rowptr(ip) >= 0 && -i + m - 1 >= 0 && i - ip - 1 >= 0 && -k + j1 - 1 >= 0 && -k + diagptr(i) - 1 >= 0 && -j1 + rowptr(i + 1) - 1 >= 0 && -j2 + rowptr(colidx(k) + 1) - 1 >= 0 && j2 - diagptr(colidx(k)) - 1 >= 0 && -ip + m - 1 >= 0 && -kp + j1p - 1 >= 0 && -kp + diagptr(ip) - 1 >= 0 && -j1p + rowptr(ip + 1) - 1 >= 0 && -j2p + rowptr(colidx(kp) + 1) - 1 >= 0 && j2p - diagptr(colidx(kp)) - 1 >= 0 }
+
+### The relation 1 is unsat: Monotonicity
+
+### The relation 1 is unsat: DS_And_Mon
+
+### Projected 0 TVs from relation 1: Projection
+
+### The relation 1 is unsat: Simplification
+
+@@@ Conjunction No. 2: [ m ] -> { [i, k, j1, j2] -> [ip, kp, j1p, j2p] : k - diagptr(colidx(kp)) = 0 && colidx(j1) - colidx(j2) = 0 && colidx(j1p) - colidx(j2p) = 0 && i >= 0 && ip >= 0 && k - rowptr(i) >= 0 && kp - rowptr(ip) >= 0 && -i + ip - 1 >= 0 && -i + m - 1 >= 0 && -k + j1 - 1 >= 0 && -k + diagptr(i) - 1 >= 0 && -j1 + rowptr(i + 1) - 1 >= 0 && -j2 + rowptr(colidx(k) + 1) - 1 >= 0 && j2 - diagptr(colidx(k)) - 1 >= 0 && -ip + m - 1 >= 0 && -kp + j1p - 1 >= 0 && -kp + diagptr(ip) - 1 >= 0 && -j1p + rowptr(ip + 1) - 1 >= 0 && -j2p + rowptr(colidx(kp) + 1) - 1 >= 0 && j2p - diagptr(colidx(kp)) - 1 >= 0 }
+
+### The relation 2 is unsat: Monotonicity
+
+### The relation 2 is unsat: DS_And_Mon
+
+### Projected 0 TVs from relation 2: Projection
+
+### The relation 2 is unsat: Simplification
+
+@@@ Conjunction No. 3: [ m ] -> { [i, k, j1, j2] -> [ip, kp, j1p, j2p] : k - diagptr(colidx(kp)) = 0 && colidx(j1) - colidx(j2) = 0 && colidx(j1p) - colidx(j2p) = 0 && i >= 0 && ip >= 0 && k - rowptr(i) >= 0 && kp - rowptr(ip) >= 0 && -i + m - 1 >= 0 && i - ip - 1 >= 0 && -k + j1 - 1 >= 0 && -k + diagptr(i) - 1 >= 0 && -j1 + rowptr(i + 1) - 1 >= 0 && -j2 + rowptr(colidx(k) + 1) - 1 >= 0 && j2 - diagptr(colidx(k)) - 1 >= 0 && -ip + m - 1 >= 0 && -kp + j1p - 1 >= 0 && -kp + diagptr(ip) - 1 >= 0 && -j1p + rowptr(ip + 1) - 1 >= 0 && -j2p + rowptr(colidx(kp) + 1) - 1 >= 0 && j2p - diagptr(colidx(kp)) - 1 >= 0 }
+
+### The relation 3 is unsat: Monotonicity
+
+### The relation 3 is unsat: DS_And_Mon
+
+### Projected 0 TVs from relation 3: Projection
+
+### The relation 3 is unsat: Simplification
+
+@@@ Conjunction No. 4: [ m ] -> { [i, k, j1, j2] -> [ip, kp, j1p, j2p] : k - j1p = 0 && colidx(j1) - colidx(j2) = 0 && colidx(j1p) - colidx(j2p) = 0 && i >= 0 && ip >= 0 && k - rowptr(i) >= 0 && kp - rowptr(ip) >= 0 && -i + ip - 1 >= 0 && -i + m - 1 >= 0 && -k + j1 - 1 >= 0 && -k + diagptr(i) - 1 >= 0 && -j1 + rowptr(i + 1) - 1 >= 0 && -j2 + rowptr(colidx(k) + 1) - 1 >= 0 && j2 - diagptr(colidx(k)) - 1 >= 0 && -ip + m - 1 >= 0 && -kp + j1p - 1 >= 0 && -kp + diagptr(ip) - 1 >= 0 && -j1p + rowptr(ip + 1) - 1 >= 0 && -j2p + rowptr(colidx(kp) + 1) - 1 >= 0 && j2p - diagptr(colidx(kp)) - 1 >= 0 }
+
+### The relation 4 is unsat: Monotonicity
+
+### The relation 4 is unsat: DS_And_Mon
+
+### Projected 0 TVs from relation 4: Projection
+
+### The relation 4 is unsat: Simplification
+
+@@@ Conjunction No. 5: [ m ] -> { [i, k, j1, j2] -> [ip, kp, j1p, j2p] : k - j1p = 0 && colidx(j1) - colidx(j2) = 0 && colidx(j1p) - colidx(j2p) = 0 && i >= 0 && ip >= 0 && k - rowptr(i) >= 0 && kp - rowptr(ip) >= 0 && -i + m - 1 >= 0 && i - ip - 1 >= 0 && -k + j1 - 1 >= 0 && -k + diagptr(i) - 1 >= 0 && -j1 + rowptr(i + 1) - 1 >= 0 && -j2 + rowptr(colidx(k) + 1) - 1 >= 0 && j2 - diagptr(colidx(k)) - 1 >= 0 && -ip + m - 1 >= 0 && -kp + j1p - 1 >= 0 && -kp + diagptr(ip) - 1 >= 0 && -j1p + rowptr(ip + 1) - 1 >= 0 && -j2p + rowptr(colidx(kp) + 1) - 1 >= 0 && j2p - diagptr(colidx(kp)) - 1 >= 0 }
+
+### The relation 5 is unsat: Monotonicity
+
+### The relation 5 is unsat: DS_And_Mon
+
+### Projected 0 TVs from relation 5: Projection
+
+### The relation 5 is unsat: Simplification
+
+@@@ Conjunction No. 6: [ m ] -> { [i, k, j1, j2] -> [ip, kp, j1p, j2p] : k - j2p = 0 && colidx(j1) - colidx(j2) = 0 && colidx(j1p) - colidx(j2p) = 0 && i >= 0 && ip >= 0 && k - rowptr(i) >= 0 && kp - rowptr(ip) >= 0 && -i + ip - 1 >= 0 && -i + m - 1 >= 0 && -k + j1 - 1 >= 0 && -k + diagptr(i) - 1 >= 0 && -j1 + rowptr(i + 1) - 1 >= 0 && -j2 + rowptr(colidx(k) + 1) - 1 >= 0 && j2 - diagptr(colidx(k)) - 1 >= 0 && -ip + m - 1 >= 0 && -kp + j1p - 1 >= 0 && -kp + diagptr(ip) - 1 >= 0 && -j1p + rowptr(ip + 1) - 1 >= 0 && -j2p + rowptr(colidx(kp) + 1) - 1 >= 0 && j2p - diagptr(colidx(kp)) - 1 >= 0 }
+
+### The relation 6 is unsat: Monotonicity
+
+### Projected 0 TVs from relation 6: Projection
+
+### The relation 6 is unsat: Simplification
+
+@@@ Conjunction No. 7: [ m ] -> { [i, k, j1, j2] -> [ip, kp, j1p, j2p] : k - j2p = 0 && colidx(j1) - colidx(j2) = 0 && colidx(j1p) - colidx(j2p) = 0 && i >= 0 && ip >= 0 && k - rowptr(i) >= 0 && kp - rowptr(ip) >= 0 && -i + m - 1 >= 0 && i - ip - 1 >= 0 && -k + j1 - 1 >= 0 && -k + diagptr(i) - 1 >= 0 && -j1 + rowptr(i + 1) - 1 >= 0 && -j2 + rowptr(colidx(k) + 1) - 1 >= 0 && j2 - diagptr(colidx(k)) - 1 >= 0 && -ip + m - 1 >= 0 && -kp + j1p - 1 >= 0 && -kp + diagptr(ip) - 1 >= 0 && -j1p + rowptr(ip + 1) - 1 >= 0 && -j2p + rowptr(colidx(kp) + 1) - 1 >= 0 && j2p - diagptr(colidx(kp)) - 1 >= 0 }
+
+### The relation 7 is unsat: Monotonicity
+
+### Projected 0 TVs from relation 7: Projection
+
+### The relation 7 is unsat: Simplification
+
+@@@ Conjunction No. 8: [ m ] -> { [i, k, j1, j2] -> [ip, kp, j1p, j2p] : j1 - diagptr(colidx(kp)) = 0 && colidx(j1) - colidx(j2) = 0 && colidx(j1p) - colidx(j2p) = 0 && i >= 0 && ip >= 0 && k - rowptr(i) >= 0 && kp - rowptr(ip) >= 0 && -i + ip - 1 >= 0 && -i + m - 1 >= 0 && -k + j1 - 1 >= 0 && -k + diagptr(i) - 1 >= 0 && -j1 + rowptr(i + 1) - 1 >= 0 && -j2 + rowptr(colidx(k) + 1) - 1 >= 0 && j2 - diagptr(colidx(k)) - 1 >= 0 && -ip + m - 1 >= 0 && -kp + j1p - 1 >= 0 && -kp + diagptr(ip) - 1 >= 0 && -j1p + rowptr(ip + 1) - 1 >= 0 && -j2p + rowptr(colidx(kp) + 1) - 1 >= 0 && j2p - diagptr(colidx(kp)) - 1 >= 0 }
+
+### Projected 0 TVs from relation 8: Projection
+
+### Projected 4 TVs from relation 8: Simplification
+
+@@@ Conjunction No. 9: [ m ] -> { [i, k, j1, j2] -> [ip, kp, j1p, j2p] : j1 - diagptr(colidx(kp)) = 0 && colidx(j1) - colidx(j2) = 0 && colidx(j1p) - colidx(j2p) = 0 && i >= 0 && ip >= 0 && k - rowptr(i) >= 0 && kp - rowptr(ip) >= 0 && -i + m - 1 >= 0 && i - ip - 1 >= 0 && -k + j1 - 1 >= 0 && -k + diagptr(i) - 1 >= 0 && -j1 + rowptr(i + 1) - 1 >= 0 && -j2 + rowptr(colidx(k) + 1) - 1 >= 0 && j2 - diagptr(colidx(k)) - 1 >= 0 && -ip + m - 1 >= 0 && -kp + j1p - 1 >= 0 && -kp + diagptr(ip) - 1 >= 0 && -j1p + rowptr(ip + 1) - 1 >= 0 && -j2p + rowptr(colidx(kp) + 1) - 1 >= 0 && j2p - diagptr(colidx(kp)) - 1 >= 0 }
+
+### Projected 0 TVs from relation 9: Projection
+
+### Projected 4 TVs from relation 9: Simplification
+
+@@@ Conjunction No. 10: [ m ] -> { [i, k, j1, j2] -> [ip, kp, j1p, j2p] : j1 - j1p = 0 && colidx(j1) - colidx(j2) = 0 && colidx(j1p) - colidx(j2p) = 0 && i >= 0 && ip >= 0 && k - rowptr(i) >= 0 && kp - rowptr(ip) >= 0 && -i + ip - 1 >= 0 && -i + m - 1 >= 0 && -k + j1 - 1 >= 0 && -k + diagptr(i) - 1 >= 0 && -j1 + rowptr(i + 1) - 1 >= 0 && -j2 + rowptr(colidx(k) + 1) - 1 >= 0 && j2 - diagptr(colidx(k)) - 1 >= 0 && -ip + m - 1 >= 0 && -kp + j1p - 1 >= 0 && -kp + diagptr(ip) - 1 >= 0 && -j1p + rowptr(ip + 1) - 1 >= 0 && -j2p + rowptr(colidx(kp) + 1) - 1 >= 0 && j2p - diagptr(colidx(kp)) - 1 >= 0 }
+
+### The relation 10 is unsat: Monotonicity
+
+### The relation 10 is unsat: DS_And_Mon
+
+### Projected 0 TVs from relation 10: Projection
+
+### The relation 10 is unsat: Simplification
+
+@@@ Conjunction No. 11: [ m ] -> { [i, k, j1, j2] -> [ip, kp, j1p, j2p] : j1 - j1p = 0 && colidx(j1) - colidx(j2) = 0 && colidx(j1p) - colidx(j2p) = 0 && i >= 0 && ip >= 0 && k - rowptr(i) >= 0 && kp - rowptr(ip) >= 0 && -i + m - 1 >= 0 && i - ip - 1 >= 0 && -k + j1 - 1 >= 0 && -k + diagptr(i) - 1 >= 0 && -j1 + rowptr(i + 1) - 1 >= 0 && -j2 + rowptr(colidx(k) + 1) - 1 >= 0 && j2 - diagptr(colidx(k)) - 1 >= 0 && -ip + m - 1 >= 0 && -kp + j1p - 1 >= 0 && -kp + diagptr(ip) - 1 >= 0 && -j1p + rowptr(ip + 1) - 1 >= 0 && -j2p + rowptr(colidx(kp) + 1) - 1 >= 0 && j2p - diagptr(colidx(kp)) - 1 >= 0 }
+
+### The relation 11 is unsat: Monotonicity
+
+### The relation 11 is unsat: DS_And_Mon
+
+### Projected 0 TVs from relation 11: Projection
+
+### The relation 11 is unsat: Simplification
+
+@@@ Conjunction No. 12: [ m ] -> { [i, k, j1, j2] -> [ip, kp, j1p, j2p] : j1 - kp = 0 && colidx(j1) - colidx(j2) = 0 && colidx(j1p) - colidx(j2p) = 0 && i >= 0 && ip >= 0 && k - rowptr(i) >= 0 && kp - rowptr(ip) >= 0 && -i + ip - 1 >= 0 && -i + m - 1 >= 0 && -k + j1 - 1 >= 0 && -k + diagptr(i) - 1 >= 0 && -j1 + rowptr(i + 1) - 1 >= 0 && -j2 + rowptr(colidx(k) + 1) - 1 >= 0 && j2 - diagptr(colidx(k)) - 1 >= 0 && -ip + m - 1 >= 0 && -kp + j1p - 1 >= 0 && -kp + diagptr(ip) - 1 >= 0 && -j1p + rowptr(ip + 1) - 1 >= 0 && -j2p + rowptr(colidx(kp) + 1) - 1 >= 0 && j2p - diagptr(colidx(kp)) - 1 >= 0 }
+
+### The relation 12 is unsat: Monotonicity
+
+### The relation 12 is unsat: DS_And_Mon
+
+### Projected 0 TVs from relation 12: Projection
+
+### The relation 12 is unsat: Simplification
+
+@@@ Conjunction No. 13: [ m ] -> { [i, k, j1, j2] -> [ip, kp, j1p, j2p] : j1 - kp = 0 && colidx(j1) - colidx(j2) = 0 && colidx(j1p) - colidx(j2p) = 0 && i >= 0 && ip >= 0 && k - rowptr(i) >= 0 && kp - rowptr(ip) >= 0 && -i + m - 1 >= 0 && i - ip - 1 >= 0 && -k + j1 - 1 >= 0 && -k + diagptr(i) - 1 >= 0 && -j1 + rowptr(i + 1) - 1 >= 0 && -j2 + rowptr(colidx(k) + 1) - 1 >= 0 && j2 - diagptr(colidx(k)) - 1 >= 0 && -ip + m - 1 >= 0 && -kp + j1p - 1 >= 0 && -kp + diagptr(ip) - 1 >= 0 && -j1p + rowptr(ip + 1) - 1 >= 0 && -j2p + rowptr(colidx(kp) + 1) - 1 >= 0 && j2p - diagptr(colidx(kp)) - 1 >= 0 }
+
+### The relation 13 is unsat: Monotonicity
+
+### The relation 13 is unsat: DS_And_Mon
+
+### Projected 0 TVs from relation 13: Projection
+
+### The relation 13 is unsat: Simplification
+
+@@@ Conjunction No. 14: [ m ] -> { [i, k, j1, j2] -> [ip, kp, j1p, j2p] : j1 - j2p = 0 && colidx(j1) - colidx(j2) = 0 && colidx(j1p) - colidx(j2p) = 0 && i >= 0 && ip >= 0 && k - rowptr(i) >= 0 && kp - rowptr(ip) >= 0 && -i + ip - 1 >= 0 && -i + m - 1 >= 0 && -k + j1 - 1 >= 0 && -k + diagptr(i) - 1 >= 0 && -j1 + rowptr(i + 1) - 1 >= 0 && -j2 + rowptr(colidx(k) + 1) - 1 >= 0 && j2 - diagptr(colidx(k)) - 1 >= 0 && -ip + m - 1 >= 0 && -kp + j1p - 1 >= 0 && -kp + diagptr(ip) - 1 >= 0 && -j1p + rowptr(ip + 1) - 1 >= 0 && -j2p + rowptr(colidx(kp) + 1) - 1 >= 0 && j2p - diagptr(colidx(kp)) - 1 >= 0 }
+
+### Projected 0 TVs from relation 14: Projection
+
+### Projected 4 TVs from relation 14: Simplification
+
+@@@ Conjunction No. 15: [ m ] -> { [i, k, j1, j2] -> [ip, kp, j1p, j2p] : j1 - j2p = 0 && colidx(j1) - colidx(j2) = 0 && colidx(j1p) - colidx(j2p) = 0 && i >= 0 && ip >= 0 && k - rowptr(i) >= 0 && kp - rowptr(ip) >= 0 && -i + m - 1 >= 0 && i - ip - 1 >= 0 && -k + j1 - 1 >= 0 && -k + diagptr(i) - 1 >= 0 && -j1 + rowptr(i + 1) - 1 >= 0 && -j2 + rowptr(colidx(k) + 1) - 1 >= 0 && j2 - diagptr(colidx(k)) - 1 >= 0 && -ip + m - 1 >= 0 && -kp + j1p - 1 >= 0 && -kp + diagptr(ip) - 1 >= 0 && -j1p + rowptr(ip + 1) - 1 >= 0 && -j2p + rowptr(colidx(kp) + 1) - 1 >= 0 && j2p - diagptr(colidx(kp)) - 1 >= 0 }
+
+### Projected 0 TVs from relation 15: Projection
+
+### Projected 4 TVs from relation 15: Simplification
 
 
 ---- CSR Incoplete Cholesky 0:
 
-  The relation 0 is unsat: Monotonicity
-  Projected 0 TVs from relation 0: Projection
-  Projected 0 TVs from relation 0: Simplification
-  The relation 1 is unsat: Monotonicity
-  Projected 0 TVs from relation 1: Projection
-  Projected 0 TVs from relation 1: Simplification
-  Projected 0 TVs from relation 2: Projection
-  Projected 0 TVs from relation 2: Simplification
-  Projected 0 TVs from relation 3: Projection
-  Projected 0 TVs from relation 3: Simplification
-  The relation 4 is unsat: Monotonicity
-  Projected 0 TVs from relation 4: Projection
-  Projected 0 TVs from relation 4: Simplification
-  The relation 5 is unsat: Monotonicity
-  Projected 0 TVs from relation 5: Projection
-  Projected 0 TVs from relation 5: Simplification
-  The relation 6 is unsat: Monotonicity
-  Projected 0 TVs from relation 6: Projection
-  Projected 0 TVs from relation 6: Simplification
-  The relation 7 is unsat: Monotonicity
-  Projected 0 TVs from relation 7: Projection
-  Projected 0 TVs from relation 7: Simplification
-  Projected 0 TVs from relation 8: Projection
-  Projected 0 TVs from relation 8: Simplification
-  Projected 0 TVs from relation 9: Projection
-  Projected 0 TVs from relation 9: Simplification
-  The relation 10 is unsat: Monotonicity
-  Projected 0 TVs from relation 10: Projection
-  Projected 0 TVs from relation 10: Simplification
-  The relation 11 is unsat: Monotonicity
-  Projected 0 TVs from relation 11: Projection
-  Projected 0 TVs from relation 11: Simplification
 
+@@@ Conjunction No. 0: [ n ] -> { [i, m, k, l] -> [ip, mp, kp, lp] : mp - row(i) = 0 && i >= 0 && ip >= 0 && -m + l >= 0 && k - row(col(m)) >= 0 && -mp + lp >= 0 && kp - row(col(mp)) >= 0 && col(k) - col(l + 1) >= 0 && col(kp) - col(lp + 1) >= 0 && -i + ip - 1 >= 0 && -i + n - 2 >= 0 && -m + row(i + 1) - 1 >= 0 && m - row(i) - 1 >= 0 && -k + row(col(m) + 1) - 1 >= 0 && -l + row(i + 1) - 1 >= 0 && -ip + n - 2 >= 0 && -mp + row(ip + 1) - 1 >= 0 && mp - row(ip) - 1 >= 0 && -kp + row(col(mp) + 1) - 1 >= 0 && -lp + row(ip + 1) - 1 >= 0 }
 
----- CSC Gaxpy:
+### The relation 0 is unsat: Monotonicity
 
-  Projected 0 TVs from relation 0: Projection
-  Projected 0 TVs from relation 0: Simplification
-  Projected 0 TVs from relation 1: Projection
-  Projected 0 TVs from relation 1: Simplification
+### The relation 0 is unsat: DS_And_Mon
 
+### Projected 0 TVs from relation 0: Projection
 
----- partial leftLU with fill-in:
+### The relation 0 is unsat: Simplification
 
-  Projected 4 TVs from relation 0: Projection
-  Projected 4 TVs from relation 0: Simplification
-  Projected 4 TVs from relation 1: Projection
-  Projected 4 TVs from relation 1: Simplification
-  Projected 4 TVs from relation 2: Projection
-  Projected 4 TVs from relation 2: Simplification
-  The relation 3 is unsat: Super_Affine_Set
+@@@ Conjunction No. 1: [ n ] -> { [i, m, k, l] -> [ip, mp, kp, lp] : mp - row(i) = 0 && i >= 0 && ip >= 0 && -m + l >= 0 && k - row(col(m)) >= 0 && -mp + lp >= 0 && kp - row(col(mp)) >= 0 && col(k) - col(l + 1) >= 0 && col(kp) - col(lp + 1) >= 0 && -i + n - 2 >= 0 && i - ip - 1 >= 0 && -m + row(i + 1) - 1 >= 0 && m - row(i) - 1 >= 0 && -k + row(col(m) + 1) - 1 >= 0 && -l + row(i + 1) - 1 >= 0 && -ip + n - 2 >= 0 && -mp + row(ip + 1) - 1 >= 0 && mp - row(ip) - 1 >= 0 && -kp + row(col(mp) + 1) - 1 >= 0 && -lp + row(ip + 1) - 1 >= 0 }
+
+### The relation 1 is unsat: Monotonicity
+
+### The relation 1 is unsat: DS_And_Mon
+
+### Projected 0 TVs from relation 1: Projection
+
+### The relation 1 is unsat: Simplification
+
+@@@ Conjunction No. 2: [ n ] -> { [i, m, k, l] -> [ip, mp, kp, lp] : kp - row(i) = 0 && col(k) - col(l) = 0 && col(kp) - col(lp) = 0 && i >= 0 && ip >= 0 && -m + l >= 0 && k - row(col(m)) >= 0 && -mp + lp >= 0 && kp - row(col(mp)) >= 0 && col(k) - col(l + 1) >= 0 && col(kp) - col(lp + 1) >= 0 && -i + ip - 1 >= 0 && -i + n - 2 >= 0 && -m + row(i + 1) - 1 >= 0 && m - row(i) - 1 >= 0 && -k + row(col(m) + 1) - 1 >= 0 && -l + row(i + 1) - 1 >= 0 && -ip + n - 2 >= 0 && -mp + row(ip + 1) - 1 >= 0 && mp - row(ip) - 1 >= 0 && -kp + row(col(mp) + 1) - 1 >= 0 && -lp + row(ip + 1) - 1 >= 0 }
+
+### Projected 0 TVs from relation 2: Projection
+
+### Projected 0 TVs from relation 2: Simplification
+
+@@@ Conjunction No. 3: [ n ] -> { [i, m, k, l] -> [ip, mp, kp, lp] : kp - row(i) = 0 && col(k) - col(l) = 0 && col(kp) - col(lp) = 0 && i >= 0 && ip >= 0 && -m + l >= 0 && k - row(col(m)) >= 0 && -mp + lp >= 0 && kp - row(col(mp)) >= 0 && col(k) - col(l + 1) >= 0 && col(kp) - col(lp + 1) >= 0 && -i + n - 2 >= 0 && i - ip - 1 >= 0 && -m + row(i + 1) - 1 >= 0 && m - row(i) - 1 >= 0 && -k + row(col(m) + 1) - 1 >= 0 && -l + row(i + 1) - 1 >= 0 && -ip + n - 2 >= 0 && -mp + row(ip + 1) - 1 >= 0 && mp - row(ip) - 1 >= 0 && -kp + row(col(mp) + 1) - 1 >= 0 && -lp + row(ip + 1) - 1 >= 0 }
+
+### Projected 0 TVs from relation 3: Projection
+
+### Projected 0 TVs from relation 3: Simplification
+
+@@@ Conjunction No. 4: [ n ] -> { [i, m, k, l] -> [ip, mp, kp, lp] : mp - row(i) = 0 && col(k) - col(l) = 0 && col(kp) - col(lp) = 0 && i >= 0 && ip >= 0 && -m + l >= 0 && k - row(col(m)) >= 0 && -mp + lp >= 0 && kp - row(col(mp)) >= 0 && col(k) - col(l + 1) >= 0 && col(kp) - col(lp + 1) >= 0 && -i + ip - 1 >= 0 && -i + n - 2 >= 0 && -m + row(i + 1) - 1 >= 0 && m - row(i) - 1 >= 0 && -k + row(col(m) + 1) - 1 >= 0 && -l + row(i + 1) - 1 >= 0 && -ip + n - 2 >= 0 && -mp + row(ip + 1) - 1 >= 0 && mp - row(ip) - 1 >= 0 && -kp + row(col(mp) + 1) - 1 >= 0 && -lp + row(ip + 1) - 1 >= 0 }
+
+### The relation 4 is unsat: Monotonicity
+
+### The relation 4 is unsat: DS_And_Mon
+
+### Projected 0 TVs from relation 4: Projection
+
+### The relation 4 is unsat: Simplification
+
+@@@ Conjunction No. 5: [ n ] -> { [i, m, k, l] -> [ip, mp, kp, lp] : mp - row(i) = 0 && col(k) - col(l) = 0 && col(kp) - col(lp) = 0 && i >= 0 && ip >= 0 && -m + l >= 0 && k - row(col(m)) >= 0 && -mp + lp >= 0 && kp - row(col(mp)) >= 0 && col(k) - col(l + 1) >= 0 && col(kp) - col(lp + 1) >= 0 && -i + n - 2 >= 0 && i - ip - 1 >= 0 && -m + row(i + 1) - 1 >= 0 && m - row(i) - 1 >= 0 && -k + row(col(m) + 1) - 1 >= 0 && -l + row(i + 1) - 1 >= 0 && -ip + n - 2 >= 0 && -mp + row(ip + 1) - 1 >= 0 && mp - row(ip) - 1 >= 0 && -kp + row(col(mp) + 1) - 1 >= 0 && -lp + row(ip + 1) - 1 >= 0 }
+
+### The relation 5 is unsat: Monotonicity
+
+### The relation 5 is unsat: DS_And_Mon
+
+### Projected 0 TVs from relation 5: Projection
+
+### The relation 5 is unsat: Simplification
+
+@@@ Conjunction No. 6: [ n ] -> { [i, m, k, l] -> [ip, mp, kp, lp] : lp - row(i) = 0 && col(k) - col(l) = 0 && col(kp) - col(lp) = 0 && i >= 0 && ip >= 0 && -m + l >= 0 && k - row(col(m)) >= 0 && -mp + lp >= 0 && kp - row(col(mp)) >= 0 && col(k) - col(l + 1) >= 0 && col(kp) - col(lp + 1) >= 0 && -i + ip - 1 >= 0 && -i + n - 2 >= 0 && -m + row(i + 1) - 1 >= 0 && m - row(i) - 1 >= 0 && -k + row(col(m) + 1) - 1 >= 0 && -l + row(i + 1) - 1 >= 0 && -ip + n - 2 >= 0 && -mp + row(ip + 1) - 1 >= 0 && mp - row(ip) - 1 >= 0 && -kp + row(col(mp) + 1) - 1 >= 0 && -lp + row(ip + 1) - 1 >= 0 }
+
+### The relation 6 is unsat: Monotonicity
+
+### The relation 6 is unsat: DS_And_Mon
+
+### Projected 0 TVs from relation 6: Projection
+
+### The relation 6 is unsat: Simplification
+
+@@@ Conjunction No. 7: [ n ] -> { [i, m, k, l] -> [ip, mp, kp, lp] : lp - row(i) = 0 && col(k) - col(l) = 0 && col(kp) - col(lp) = 0 && i >= 0 && ip >= 0 && -m + l >= 0 && k - row(col(m)) >= 0 && -mp + lp >= 0 && kp - row(col(mp)) >= 0 && col(k) - col(l + 1) >= 0 && col(kp) - col(lp + 1) >= 0 && -i + n - 2 >= 0 && i - ip - 1 >= 0 && -m + row(i + 1) - 1 >= 0 && m - row(i) - 1 >= 0 && -k + row(col(m) + 1) - 1 >= 0 && -l + row(i + 1) - 1 >= 0 && -ip + n - 2 >= 0 && -mp + row(ip + 1) - 1 >= 0 && mp - row(ip) - 1 >= 0 && -kp + row(col(mp) + 1) - 1 >= 0 && -lp + row(ip + 1) - 1 >= 0 }
+
+### The relation 7 is unsat: Monotonicity
+
+### The relation 7 is unsat: DS_And_Mon
+
+### Projected 0 TVs from relation 7: Projection
+
+### The relation 7 is unsat: Simplification
+
+@@@ Conjunction No. 8: [ n ] -> { [i, m, k, l] -> [ip, mp, kp, lp] : m - kp = 0 && col(k) - col(l) = 0 && col(kp) - col(lp) = 0 && i >= 0 && ip >= 0 && -m + l >= 0 && k - row(col(m)) >= 0 && -mp + lp >= 0 && kp - row(col(mp)) >= 0 && col(k) - col(l + 1) >= 0 && col(kp) - col(lp + 1) >= 0 && -i + ip - 1 >= 0 && -i + n - 2 >= 0 && -m + row(i + 1) - 1 >= 0 && m - row(i) - 1 >= 0 && -k + row(col(m) + 1) - 1 >= 0 && -l + row(i + 1) - 1 >= 0 && -ip + n - 2 >= 0 && -mp + row(ip + 1) - 1 >= 0 && mp - row(ip) - 1 >= 0 && -kp + row(col(mp) + 1) - 1 >= 0 && -lp + row(ip + 1) - 1 >= 0 }
+
+### Projected 0 TVs from relation 8: Projection
+
+### Projected 0 TVs from relation 8: Simplification
+
+@@@ Conjunction No. 9: [ n ] -> { [i, m, k, l] -> [ip, mp, kp, lp] : m - kp = 0 && col(k) - col(l) = 0 && col(kp) - col(lp) = 0 && i >= 0 && ip >= 0 && -m + l >= 0 && k - row(col(m)) >= 0 && -mp + lp >= 0 && kp - row(col(mp)) >= 0 && col(k) - col(l + 1) >= 0 && col(kp) - col(lp + 1) >= 0 && -i + n - 2 >= 0 && i - ip - 1 >= 0 && -m + row(i + 1) - 1 >= 0 && m - row(i) - 1 >= 0 && -k + row(col(m) + 1) - 1 >= 0 && -l + row(i + 1) - 1 >= 0 && -ip + n - 2 >= 0 && -mp + row(ip + 1) - 1 >= 0 && mp - row(ip) - 1 >= 0 && -kp + row(col(mp) + 1) - 1 >= 0 && -lp + row(ip + 1) - 1 >= 0 }
+
+### Projected 0 TVs from relation 9: Projection
+
+### Projected 0 TVs from relation 9: Simplification
+
+@@@ Conjunction No. 10: [ n ] -> { [i, m, k, l] -> [ip, mp, kp, lp] : m - lp = 0 && col(k) - col(l) = 0 && col(kp) - col(lp) = 0 && i >= 0 && ip >= 0 && -m + l >= 0 && k - row(col(m)) >= 0 && -mp + lp >= 0 && kp - row(col(mp)) >= 0 && col(k) - col(l + 1) >= 0 && col(kp) - col(lp + 1) >= 0 && -i + ip - 1 >= 0 && -i + n - 2 >= 0 && -m + row(i + 1) - 1 >= 0 && m - row(i) - 1 >= 0 && -k + row(col(m) + 1) - 1 >= 0 && -l + row(i + 1) - 1 >= 0 && -ip + n - 2 >= 0 && -mp + row(ip + 1) - 1 >= 0 && mp - row(ip) - 1 >= 0 && -kp + row(col(mp) + 1) - 1 >= 0 && -lp + row(ip + 1) - 1 >= 0 }
+
+### The relation 10 is unsat: Monotonicity
+
+### The relation 10 is unsat: DS_And_Mon
+
+### Projected 0 TVs from relation 10: Projection
+
+### The relation 10 is unsat: Simplification
+
+@@@ Conjunction No. 11: [ n ] -> { [i, m, k, l] -> [ip, mp, kp, lp] : m - lp = 0 && col(k) - col(l) = 0 && col(kp) - col(lp) = 0 && i >= 0 && ip >= 0 && -m + l >= 0 && k - row(col(m)) >= 0 && -mp + lp >= 0 && kp - row(col(mp)) >= 0 && col(k) - col(l + 1) >= 0 && col(kp) - col(lp + 1) >= 0 && -i + n - 2 >= 0 && i - ip - 1 >= 0 && -m + row(i + 1) - 1 >= 0 && m - row(i) - 1 >= 0 && -k + row(col(m) + 1) - 1 >= 0 && -l + row(i + 1) - 1 >= 0 && -ip + n - 2 >= 0 && -mp + row(ip + 1) - 1 >= 0 && mp - row(ip) - 1 >= 0 && -kp + row(col(mp) + 1) - 1 >= 0 && -lp + row(ip + 1) - 1 >= 0 }
+
+### The relation 11 is unsat: Monotonicity
+
+### The relation 11 is unsat: DS_And_Mon
+
+### Projected 0 TVs from relation 11: Projection
+
+### The relation 11 is unsat: Simplification
