@@ -52,19 +52,6 @@ extern Relation* parse_relation(std::string relation_string);
 }
 
 /*!
- * This function runs the Relation string through ISL using isl_map
- * and returns the resulting string.  More normalization possible.
- */
-//std::string getRelationStringFromISL(std::string rstr);
-
-/*!
- * This function runs the Relation string through ISL using isl_basic_mao
- * and returns the resulting string.  Less normalization possible.
- */
-//std::string getRelationStringFromBasicISL(std::string rstr);
-
-
-/*!
  * \class Conjunction
  * \brief Class containing sets of all the equalities and inequalities
  *
@@ -276,6 +263,9 @@ private:
     int mInArity;
 
 };
+
+//! This function returns a set of constraints that are in conjB but not in conjA
+std::set<Exp> constraintsDifference(Conjunction* conjB, Conjunction* conjA);
 
 /*!
  * \class SparseConstraints
