@@ -1,16 +1,13 @@
 /*!
- * \file util.h
+ * \file jsonHelper.cc
  *
- * \brief Utilities for the IEGen project
+ * \brief Utilities for reading json file information in th environment
  *
- * \date Started: 9/13/2010, but has been completely rewritten
- * # $Revision:: 622                $: last committed revision
- * # $Date:: 2013-01-18 13:11:32 -0#$: date of last committed revision
- * # $Author:: cathie               $: author of last committed revision
+ * \date Started: 2017
  *
- * \authors
+ * \authors Mahdi Soltan Mohammadi, Michelle Strout
  *
- * Copyright (c) 2012, Colorado State University <br>
+ * Copyright (c) 2017, University of Arizona <br>
  * All rights reserved. <br>
  * See ../../COPYING for details. <br>
  */
