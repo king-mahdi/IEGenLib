@@ -11,7 +11,7 @@
  *
  * \date Started: 3/28/12
  *
- * \authors Michelle Strout
+ * \authors Michelle Strout, Mahdi Soltan Mohammadi
  *
  * Copyright (c) 2012, Colorado State University <br>
  * Copyright (c) 2015, University of Arizona <br>
@@ -572,6 +572,8 @@ public:
         }
     }
 
+    int getArity(){ return mArity;}
+
 private:
     int mArity;
 };
@@ -762,6 +764,9 @@ private:
 Set* passSetThruISL(Set* s);
 Relation* passRelationThruISL(Relation* r);
 
+
 }//end namespace iegenlib
+
+//#include "uniQuantRule.h"
 
 #endif /* SET_RELATION_H_ */

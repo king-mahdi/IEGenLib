@@ -1,7 +1,7 @@
 /*!
  * \file jsonHelper.h
  *
- * \brief Utilities for reading json file information in th environment
+ * \brief Utilities for reading json file information in the environment
  *
  * \date Started: 2017
  *
@@ -29,7 +29,7 @@ void addUFCs(json &ufcs);
 
 // Reads a list of universially quantified constraints from a json structure
 // and stores them in the environment
-void adduniQuantConstraints(json &uqCons);
+void adduniQuantRules(json &uqCons);
 
 // Reads iterators that we should not project from a json sructure
 void notProjectIters(Relation* rel, std::set<int> &parallelTvs, json &np);

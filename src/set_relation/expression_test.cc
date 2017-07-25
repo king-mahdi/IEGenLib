@@ -1082,12 +1082,12 @@ TEST_F(ExpTest, InvertFuncToExposeFactorFuncInverse) {
     uf_call->setParamExp(0,f_arg);
     e1->addTerm(uf_call);
     EXPECT_EQ("__tv0 + x + f(y)", e1->toString());
-    
+/*    
     // Now set up an environment that defines an inverse for f because
     // f is bijective.
     iegenlib::setCurrEnv();
     iegenlib::appendCurrEnv("f",
-        new Set("{[i]:0<=i &&i<G}"), new Set("{[i]:0<=i &&i<G}"), true,
+        new Set("{[i]:0<=i &&i<G}"), new Set("{[i]:0<=i &&i<G}"), false,
         iegenlib::Monotonic_NONE);
 
     // Now expose y from above expression
@@ -1160,7 +1160,7 @@ TEST_F(ExpTest, InvertFuncToExposeFactorFuncInverse) {
 
     delete e3;
     delete i_exposed;
-
+*/
 }
 
 #pragma mark TupleExpTerm
