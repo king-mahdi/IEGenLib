@@ -47,13 +47,12 @@ void addUFCs(json &ufcs){
 
 // Reads a list of universially quantified constraints from a json structure
 // and stores them in the environment
-void adduniQuantRules(json &uqCons){
+void addUniQuantRules(json &uqCons){
 
   UniQuantRule *uqRule;
   for (size_t j = 0; j < uqCons.size(); ++j){
 
     // forall e1, e2, ... : p => q
-    delete uqRule;
     uqRule = new UniQuantRule(uqCons[j]["Type"].as<string>(), 
                 uqCons[j]["UniQuantVar"].as<string>(), 
                 uqCons[j]["p"].as<string>(), uqCons[j]["q"].as<string>());

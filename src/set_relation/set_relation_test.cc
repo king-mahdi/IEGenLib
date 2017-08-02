@@ -3647,6 +3647,11 @@ TEST_F(SetRelationTest, isUFCallParam) {
 //Testing mapUFCtoSym: get a map of all UFCalls to equ. symbolic constant
 TEST_F(SetRelationTest, mapUFCtoSym) {
 
+    iegenlib::setCurrEnv(); // Clears out the environment
+    iegenlib::appendCurrEnv("col", new Set("{[i]: 0 <= i && i < nnz}"),
+        new Set("{[j]: 0<=j && j < n}"), true, iegenlib::Monotonic_NONE );
+    iegenlib::appendCurrEnv("idx", new Set("{[i]: 0 <= i && i < n}"),
+        new Set("{[j]: 0<=j && j < nnz}"), true, iegenlib::Monotonic_Increasing );
     Relation *r = new Relation("[n] -> { [i,j] -> [ip,jp] : i = col(jp) "
        "and i < ip and 0 <= i and i < n and idx(i) <= j and j < idx(i+1) "
          "and 0 <= ip and ip < n and idx(ip) <= jp and jp < idx(ip+1) }");
@@ -3661,16 +3666,13 @@ TEST_F(SetRelationTest, mapUFCtoSym) {
     ss<<"\tUFC = idx(__tv2 + 1)  ,  sym = idx___tv2P1_"<< std::endl;
     string exp_str = ss.str();
 
-    iegenlib::UFCallMap *map;
+    iegenlib::UFCallMap *map = new iegenlib::UFCallMap();
 
-    // ---------        Geting a map of UFCalls    ---------------
-    map = r->mapUFCtoSym();
-
+    // ---------        Getting a map of UFCalls    ---------------
+    r->superAffineRelation(map);
 
     EXPECT_EQ( exp_str , map->toString() );
 
-
-//    std::cout<<std::endl<<map->toString()<<std::endl;
     delete r;
     delete map;
 }
@@ -3755,7 +3757,7 @@ TEST_F(SetRelationTest, superAffineSet) {
         new Set("{[i]:0<=i &&i<n}"), 
         new Set("{[j]:0<=j &&j<m}"), true, iegenlib::Monotonic_NONE);
 
-    iegenlib::UFCallMap *ufcmap;
+    iegenlib::UFCallMap *ufcmap = new iegenlib::UFCallMap();
 
     //!  ----------------   Testing superAffineSet     ------------
 
@@ -3767,11 +3769,9 @@ TEST_F(SetRelationTest, superAffineSet) {
     " -col___tv0__tv1_ + n - 1 >= 0 && -idx_col___tv0__tv1__"
        " + m - 1 >= 0 && -idx_col___tv0__tv1__ + n - 1 >= 0 }");
 
-    //! Geting a map of UFCalls  ---------------
-    ufcmap = s1->mapUFCtoSym();
     //! Getting the superAffineSet
     Set* su_s1 = s1->superAffineSet(ufcmap);
-//    std::cout<<std::endl<<su_s1->toString()<<std::endl;
+//    std::cout<<std::endl<<su_s1->toISLString()<<std::endl;
 
     EXPECT_EQ( ex_s1 , su_s1->toString() );
 
@@ -3784,8 +3784,7 @@ TEST_F(SetRelationTest, superAffineSet) {
                  " Nv - idx___tv0_B1B - 1 >= 0 && -idx___tv0_B0B"
                  " + m - 1 >= 0 && -idx___tv0_B1B + m - 1 >= 0 }");
 
-    //! Geting a map of UFCalls  ---------------
-    ufcmap = s2->mapUFCtoSym();
+    ufcmap = new iegenlib::UFCallMap();
     //! Getting the superAffineSet
     Set* su_s2 = s2->superAffineSet(ufcmap);
 //    std::cout<<std::endl<<su_s2->toString()<<std::endl;
@@ -3806,8 +3805,7 @@ TEST_F(SetRelationTest, superAffineSet) {
             " 0 && -__tv3 + m - 1 >= 0 && -col___tv3idx___tv1__ + n"
                        " - 1 >= 0 && -idx___tv1_ + m - 1 >= 0 }");
 
-    //! Geting a map of UFCalls  ---------------
-    ufcmap = r1->mapUFCtoSym();
+    ufcmap = new iegenlib::UFCallMap();
     Relation* su_r1 = r1->superAffineRelation(ufcmap);
 //    std::cout<<std::endl<<su_r1->toString()<<std::endl;
 
@@ -3846,8 +3844,7 @@ TEST_F(SetRelationTest, reverseAffineSubstitution) {
           " idx(col(i, j)) >= 0 && i < m && j < m && idx(col(i, j)) < m &&"
                                      " col(i, j) < n && idx(col(i,j))< n }");
 
-    //! Geting a map of UFCalls  ---------------
-    ufcmap = s1->mapUFCtoSym();
+    ufcmap = new iegenlib::UFCallMap();
     //! Getting the superAffineSet
     Set* su_s1 = s1->superAffineSet(ufcmap);
 
@@ -3864,8 +3861,7 @@ TEST_F(SetRelationTest, reverseAffineSubstitution) {
     Set *ex_s2 = new Set ("{ [i] : i >= 0 && idx(i)[0] >= 0 && idx(i)[1] >= 0"
             " && i < n && idx(i)[1] < Nv && idx(i)[0] < m && idx(i)[1] < m}");
 
-    //! Geting a map of UFCalls  ---------------
-    ufcmap = s2->mapUFCtoSym();
+    ufcmap = new iegenlib::UFCallMap();
     //! Getting the superAffineSet
     Set* su_s2 = s2->superAffineSet(ufcmap);
 
@@ -3886,8 +3882,7 @@ TEST_F(SetRelationTest, reverseAffineSubstitution) {
       " && j >= 0 && jp >= 0 && col(jp, idx(j)) >= 0 && idx(j) >= 0 && i < ip"
        " && j < n && ip < n && jp < m && idx(j)< m && col(jp, idx(j)) < n }");
 
-    //! Geting a map of UFCalls  ---------------
-    ufcmap = r1->mapUFCtoSym();
+    ufcmap = new iegenlib::UFCallMap();
     Relation* su_r1 = r1->superAffineRelation(ufcmap);
 
     //! Getting the reverseAffineSubstitution
@@ -4225,37 +4220,3 @@ TEST_F(SetRelationTest, removeUFCallConsts){
    delete extendedF2;
 }
 
-/*
-#pragma mark domainInfoT
-TEST_F(SetRelationTest, domainInfoT){
-
-    iegenlib::setCurrEnv();
-    iegenlib::appendCurrEnv("colidx",
-            new Set("{[i]:0<=i &&i<nnz}"),         // Domain 
-            new Set("{[j]:0<=j &&j<m}"),           // Range
-            false,                                 // Not bijective.
-            iegenlib::Monotonic_NONE               // no monotonicity
-            );
-    iegenlib::appendCurrEnv("rowptr",
-        new Set("{[i]:0<=i &&i<m}"), 
-        new Set("{[j]:0<=j &&j<nnz}"), false, iegenlib::Monotonic_Increasing);
-    iegenlib::appendCurrEnv("diagptr",
-        new Set("{[i]:0<=i &&i<m}"), 
-        new Set("{[j]:0<=j &&j<nnz}"), false, iegenlib::Monotonic_Increasing);
-
-    Set *F1 = new Set("[m] -> {[i,ip,k,kp]: i < ip"
-                                   " && 0 <= i && i < m"
-                                  " && 0 <= ip && ip < m"
-                           " && rowptr(i) <= k && k < diagptr(i)"
-                         " && rowptr(ip) <= kp && kp < diagptr(ip)"
-                       " && diagptr(colidx(k)) = rowptr(1+colidx(k))"
-                       " && diagptr(colidx(k)) = rowptr(1+colidx(kp))"
-                       " && diagptr(k) = 1+colidx(kp)"
-                                     " && k = kp}");
-
-    json data;
-
-    Set *res = F1->domainInfo(data, 0);
-  
-}
-*/

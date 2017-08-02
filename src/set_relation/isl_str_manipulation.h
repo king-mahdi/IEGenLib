@@ -62,7 +62,7 @@ typedef struct srParts{
 
     srParts(){
         sC = '{';
-        sepC = ':';
+        sepC = ":";
         eC = '}';
     }
 
@@ -120,6 +120,9 @@ isl_map* islStringToMap( std::string relstr , isl_ctx *ctx );
 */
 std::string islMapToString ( isl_map* imap , isl_ctx *ctx );
 
+/*! This function buils and returns a full string from parts
+*/
+std::string getFullStrFromParts (srParts  parts);
 
 }// iegenlib namespace
 

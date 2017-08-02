@@ -287,4 +287,11 @@ std::string islMapToString ( isl_map* imap , isl_ctx *ctx )
   return stringFromISL;
 }
 
+/*! This function buils and returns a full string from parts
+*/
+std::string getFullStrFromParts (srParts  parts){
+  return (parts.symVars + parts.sC + parts.tupDecl +
+          parts.sepC + parts.constraints + parts.eC);
+}
+
 }// iegenlib namespace

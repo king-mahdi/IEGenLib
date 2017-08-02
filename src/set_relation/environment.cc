@@ -60,10 +60,6 @@ void appendCurrEnv(std::string funcName, Set* domain, Set* range,
   Environment* env = new Environment(ufunc);
   currentEnv.append(env);
 
-if (funcName == "f" && monoType == Monotonic_NONE && bijective){
-std::cout<<"\n\nDS = "<<domain->getArity()<<"  RS = "<<range->getArity()<<"\n\n";
-}
-
 /////////////////////////////////////////////////
   if( domain->getArity() == 1 && range->getArity() == 1 ){
 

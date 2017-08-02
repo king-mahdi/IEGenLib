@@ -129,7 +129,7 @@ public:
     virtual std::string toString() const;
 
     //! Convert to a human-readable string, pretty printed.
-    virtual std::string prettyPrintString() const;
+    virtual std::string prettyPrintString(int aritySplit = 0) const;
 
     //! Convert to a DOT string.
     //! Pass in the parent node id and the next node id.
@@ -420,6 +420,23 @@ public:
       return false;
     }
 
+    //! This function uses all the available universally quantified constraints
+    //  about the dependence to either determine its unsatisfiability or
+    //  if it is not possible to determine unsatisfiability at compiletime
+    //  return any new equalities that might be get discovered using 
+    //  quantified constraints. If the dependence is UNSAT the returned 
+    //  conjunction object would have its unsat flag set, which can be checked 
+    //  using isUnsat function in Conjunction class. If the dependence is 
+    //  MaySat at compiletime, the returned conjunction would include any 
+    //  newly discovered equalities that might be useful for instance for
+    //  generating faster inspector codes.  
+    //  ** The caller is going to own returned conjunction object
+    Conjunction* determineUnsatOrReturnNewEqualities(bool *useRule = NULL);
+
+    //! Return the number of conjunction: 0 number of conjunctions means
+    //  this is an unsatisfiable SparseConstraints.
+    int size(){ return mConjunctions.size(); } 
+    
 
 // FIXME: what methods should we have to iterate over conjunctions so
 // this can go back to protected?
@@ -498,29 +515,6 @@ public:
     ** \return Set will contain all bounds on expressions in tuple expression.
     */
     Set* boundTupleExp(const TupleExpTerm& tuple_exp) const; 
-    
-    /*! Will create constraints uf1str(e) opstr uf2str(e) for all
-    **  actual parameters that occur for those UFs. 
-    ** See SparseConstraints::addUFConstraintsHelper for more docs.
-    **
-    ** \param uf1str name of first uninterpreted function
-    ** \param opstr  operator that describes relationship between UFs
-    ** \param uf2str name of second uninterpreted function.
-    **
-    ** \return Set will contain new constraints and will be owned by caller
-    */
-    Set* addUFConstraints(std::string uf1str, 
-                          std::string opstr, std::string uf2str) const;
-    
-    /*! For UFs declared as having a Monotonicity value (see 
-    **  MonotonicType in UninterFunc.h) constraints will be
-    **  added to parameter expressions as needed.
-    **  For example, if we find that f(e1)<f(e2) and f is monotonically
-    **  non-decreasing, then we will add the constraint that e1<e2.
-    **
-    ** \return Set will contain new constraints and will be owned by caller
-    */
-    Set* addConstraintsDueToMonotonicity() const;
 
     /*! Adds constraints due to domain and range of all UFCalls in the Set.
     **  Function returns the new Set with added constraints, leaving caller
@@ -540,7 +534,7 @@ public:
     **    (2) We replace all UFCalls with symbolic constants in the ufc map.
     **  The function does not own the ufcmap.
     */
-    Set* superAffineSet(UFCallMap* ufcmap);
+    Set* superAffineSet(UFCallMap* ufcmap, bool boundDR = true);
 
     /*! Creates a sub non-affine set from an affine set.
     **  By replacing symbolic constants that are representative of UFCalls
@@ -613,8 +607,8 @@ public:
     //! Get/Set our in/out arity.
     int inArity() const { return mInArity; }
     int outArity() const { return mOutArity; }
-    void SetinArity(int in) { mInArity = in; }
-    void SetoutArity(int out) { mOutArity = out; }
+    void setInArity(int in) { mInArity = in; }
+    void setOutArity(int out) { mOutArity = out; }
 
     //! For all conjunctions, sets them to the given tuple declaration.
     //! If there are some constants that don't agree then throws exception.
@@ -678,35 +672,12 @@ public:
     //! addConjunction that checks the Conjunction and Relation arities match
     //! \param adoptedconjuction (adopted)
     void addConjunction(Conjunction *adoptedConjunction);
-    
-    /*! Will create constraints uf1str(e) opstr uf2str(e) for all
-    **  actual parameters that occur for those UFs. 
-    ** See SparseConstraints::addUFConstraintsHelper for more docs.
-    **
-    ** \param uf1str name of first uninterpreted function
-    ** \param opstr  operator that describes relationship between UFs
-    ** \param uf2str name of second uninterpreted function.
-    **
-    ** \return Relation will contain new constraints and is owned by caller
-    */
-    Relation* addUFConstraints(std::string uf1str, 
-                               std::string opstr, std::string uf2str) const;
 
     /*! Adds constraints due to domain and range of all UFCalls in the
     **  Relation. Function returns the new Relation with added constraints,
     **  leaving caller unchanged. User owns the returned Relation object.
     */
     Relation* boundDomainRange();
-    
-    /*! For UFs declared as having a Monotonicity value (see 
-    **  MonotonicType in UninterFunc.h) constraints will be
-    **  added to parameter expressions as needed.
-    **  For example, if we find that f(e1)<f(e2) and f is monotonically
-    **  non-decreasing, then we will add the constraint that e1<e2.
-    **
-    ** \return Relation will contain new constraints and is owned by caller
-    */
-    Relation* addConstraintsDueToMonotonicity() const;    
 
     //! Send through ISL to achieve a canonical form.
     void normalize();
@@ -721,7 +692,7 @@ public:
     **  The function does not own the ufcmap.  Caller must cleanup returned
     **  Relation.
     */
-    Relation* superAffineRelation(UFCallMap* ufcmap);
+    Relation* superAffineRelation(UFCallMap* ufcmap, bool boundDR = true);
 
     /*! Creates a sub non-affine set from an affine Relation.
     **  By replacing symbolic constants that are representative of UFCalls
