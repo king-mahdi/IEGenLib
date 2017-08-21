@@ -192,7 +192,8 @@ void simplify(string inputFile)
     for(int i = Monotonicity ; i <= TheOthers ; i++){
         useRule[i] = true;
     }
-  
+    useRule[FuncConsistency] = false;
+
     char msg[100];
     sprintf(msg, "@@@ Relation No. %d: ", int(i+1) );
     printRelation( string(msg) , rel);

@@ -3423,18 +3423,18 @@ class VisitorGatherAllTerms : public Visitor {
     }
 
     std::vector<Term*> getTerms() { 
-        for (std::set<Term>::iterator it=constTerms.begin(); 
+        /*for (std::set<Term>::iterator it=constTerms.begin(); 
              it!=constTerms.end(); it++) 
-        { allTerms.insert( allTerms.end() , (*it).clone() ); }
+        { allTerms.insert( allTerms.end() , (*it).clone() ); }*/
         for (std::set<UFCallTerm>::iterator it=ufcTerms.begin(); 
              it!=ufcTerms.end(); it++) 
         { allTerms.insert( allTerms.end() , (*it).clone() ); }
         for (std::set<TupleVarTerm>::iterator it=tupVarTerms.begin(); 
              it!=tupVarTerms.end(); it++) 
         { allTerms.insert( allTerms.end() , (*it).clone() ); }
-        for (std::set<VarTerm>::iterator it=varTerms.begin(); 
+        /*for (std::set<VarTerm>::iterator it=varTerms.begin(); 
              it!=varTerms.end(); it++) 
-        { allTerms.insert( allTerms.end() , (*it).clone() ); }
+        { allTerms.insert( allTerms.end() , (*it).clone() ); }*/
         return allTerms;
     }
 };
@@ -3451,8 +3451,15 @@ Conjunction* SparseConstraints::determineUnsatOrReturnNewEqualities(bool *useRul
   Conjunction* result = new Conjunction ( origTupleDecl );
   Set origSet(origTupleDecl);
   origSet.addConjunction( (*(mConjunctions.begin()))->clone() );
+
+//  (*(origSet.mConjunctions.begin()))->setInArity(0);
+//  origSet.normalize();
+
   UFCallMap *ufcmap = new UFCallMap();
-  Set *supAffSet = origSet.superAffineSet(ufcmap, false);
+  Set *supAffSet = origSet.superAffineSet(ufcmap);
+
+//  delete ufcmap;
+//  ufcmap = new UFCallMap();
 
   // If caller has not specified what type of rules we should instantiate
   // (useRule = NULL), then just indicate we should use everything:
@@ -3461,22 +3468,40 @@ Conjunction* SparseConstraints::determineUnsatOrReturnNewEqualities(bool *useRul
     for(int i = Monotonicity ; i <= TheOthers ; i++){ useRule[i] = true;}
   }
 
+  std::string isl_input_string, isl_output_string;
+
   // Starting to build up the input set (as a string) to ISL
   // We get the intial value for constraints from superAffine version of
   // the original constraints, and the symbolic constant part from
   // the orginal set since we will get all the symbolic consntants 
   // including the ones related superAffine set later from ufcmap.
+
+  // 
+  Set * drOrigSet = origSet.boundDomainRange();
+  std::stringstream ss;
+  StringIterator * symIter;
+  bool foundSymbols = false;
+  symIter = (*(drOrigSet->mConjunctions.begin()))->getSymbolIterator();
+  while (symIter->hasNext()) {
+    if (foundSymbols == false) {
+      foundSymbols = true;
+      ss << "[ "<< symIter->next();
+    } else { ss << ", " << symIter->next(); }
+  }
+  delete drOrigSet;
+
   srParts instantiationParts, temp;
   instantiationParts = getPartsFromStr( supAffSet->toISLString(0) );
   instantiationParts.constraints.erase(instantiationParts.constraints.end()-1,
                                        instantiationParts.constraints.end());
   instantiationParts.constraints = "(" + instantiationParts.constraints + " ) ";
-  temp = getPartsFromStr( toISLString(0) );  
-  temp.symVars.erase(temp.symVars.end()-6, temp.symVars.end());
-  instantiationParts.symVars = temp.symVars;
+//  instantiationParts.symVars.erase(instantiationParts.symVars.end()-6, instantiationParts.symVars.end());
+//  temp = getPartsFromStr( toISLString(0) );  
+//  temp.symVars.erase(temp.symVars.end()-6, temp.symVars.end());
+//  instantiationParts.symVars = temp.symVars;
 
-std::cout<<"\nOrigSyms = "<<instantiationParts.symVars<"\n";
-std::cout<<"\nSupCons = "<<instantiationParts.constraints<"\n";
+//std::cout<<"\nOrigSyms = "<<instantiationParts.symVars<"\n";
+//std::cout<<"\nSupCons = "<<instantiationParts.constraints<"\n";
 
   // Gather all the terms in the original conjunction 
   // to generate Expression Set (E) for rule instantiation
@@ -3541,11 +3566,14 @@ std::cout<<"}\n ";
 //if(i==1 && k ==1 )
 //std::cout<<"\n\n LS = "<<leftSideOfTheRule->size()<<"  RS = "<<rightSideOfTheRule->size()<<"\n\n";
 
-        // create superAffine sets of left/right sides
-        Set* supAffLeft  = leftSideOfTheRule->superAffineSet(ufcmap, false);
-        Set* supAffRight = rightSideOfTheRule->superAffineSet(ufcmap, false);
-
+        Set *supAffLeft, *supAffRight;
+        std::string leftStr = "false", rightStr = "false";
         srParts subLeftSideParts, subRightSideParts;
+
+        // create superAffine sets of left/right sides
+        supAffLeft  = leftSideOfTheRule->superAffineSet(ufcmap, false);
+        supAffRight = rightSideOfTheRule->superAffineSet(ufcmap, false);
+
         subLeftSideParts = getPartsFromStr(supAffLeft->prettyPrintString());
         subRightSideParts = getPartsFromStr(supAffRight->prettyPrintString());
 
@@ -3554,7 +3582,7 @@ std::cout<<"}\n ";
         // e1 = e2 (substitute (e1,e2) with (1,1) => 1 = 1 (always true)
         // e1 = e2 (substitute (e1,e2) with (1,2) => 1 = 2 (always false)
         // e1 = e2 (substitute (e1,e2) with (i,j) => i = j (Cannot say anything in general)
-        std::string leftStr = "false", rightStr = "false";
+
         subLeftSideParts.constraints = trim(subLeftSideParts.constraints);
         subRightSideParts.constraints = trim(subRightSideParts.constraints);
 
@@ -3573,8 +3601,85 @@ std::cout<<"}\n ";
           rightStr = subRightSideParts.constraints;
        }
 
-        instantiationParts.constraints += " && ( (not(" + leftStr + 
+if( leftStr == "true" &&
+    rightStr == "false"){ 
+  std::cout<<"\n\n\nNOT SAT!!\n\n"; 
+  result->setUnsat();
+  return result;
+
+}else if( leftStr != "false" &&
+    rightStr != "true"
+   )
+{/*
+//Set* origSupAff = origSet.
+Set* leftIntersect = origSet.Intersect(leftSideOfTheRule);
+Set* rightIntersect = origSet.Intersect(rightSideOfTheRule);
+
+(*( leftIntersect->mConjunctions.begin() ))->setInArity( 0 );
+(*(rightIntersect->mConjunctions.begin() ))->setInArity( 0 );
+
+leftIntersect->normalize();
+rightIntersect->normalize();
+Set *supAffLeftInter  = leftIntersect->superAffineSet(ufcmap, false);
+Set *supAffRightInter = rightIntersect->superAffineSet(ufcmap, false);
+
+srParts subLeftSidePartsInter = getPartsFromStr(supAffLeftInter->prettyPrintString());
+srParts subRightSidePartsInter = getPartsFromStr(supAffRightInter->prettyPrintString());
+subLeftSidePartsInter.constraints = trim(subLeftSidePartsInter.constraints);
+subRightSidePartsInter.constraints = trim(subRightSidePartsInter.constraints);
+
+string leftStrInter, rightStrInter;
+        if(subLeftSidePartsInter.constraints == ""){
+          leftStrInter = "true";
+        } else if(subLeftSidePartsInter.constraints == "FALSE"){
+          leftStrInter = "false";
+        } else {
+          leftStrInter = subLeftSidePartsInter.constraints;
+        }
+        if(subRightSidePartsInter.constraints == ""){
+          rightStrInter = "true";
+        } else if(subRightSidePartsInter.constraints == "FALSE"){
+          rightStrInter = "false";
+        } else {
+          rightStrInter = subRightSidePartsInter.constraints;
+       }
+
+if( leftStrInter == "true" &&
+    rightStrInter == "false"){ 
+  std::cout<<"\n\n\nNOT SAT!!\n\n"; 
+  result->setUnsat();
+  return result;
+
+}else if( leftStrInter != "false" &&
+    rightStrInter != "true"
+
+   )
+{*/
+//std::cout<<"\nI.K = "<<i<<"."<<k<<"\n";
+        instantiationParts.constraints += "\n&& ( (not(" + leftStr + 
                                           ")) || (" + rightStr + ") )";
+
+  // Get all the symbolic constants that have replaced UFCs from ufcmap
+  instantiationParts.symVars = ss.str() + ", " + ufcmap->varTermStrList() + " ] -> ";
+
+  isl_input_string = getFullStrFromParts( instantiationParts );
+//  std::cout<<"\nISL input str = "<<isl_input_string<"\n"; 
+
+  isl_output_string = passRelationStrThruISL( isl_input_string );
+//  std::cout<<"\n\n\n\nISL output str = "<<isl_output_string<"\n"; 
+
+  temp = getPartsFromStr( supAffSet->toISLString(0) );
+  temp.constraints.erase(temp.constraints.end()-1,
+                                       temp.constraints.end());
+//  instantiationParts.constraints = "(" + temp.constraints + " ) ";
+
+//}
+
+//delete leftIntersect;
+//delete rightIntersect;
+//delete supAffLeftInter;
+//delete supAffRightInter;
+}
 
 if(false){
 std::cout<<"\n TERMS = { ";
@@ -3585,8 +3690,7 @@ std::cout<<"\n TERMS = { ";
     }
 std::cout<<"}\n "<<subMap.toString();
 
- std::cout<<"\n"<<"  OrigP = "<<(uqRule->getLeftSide())->prettyPrintString()<<"\n  OrigQ = "<<(uqRule->getRightSide())->prettyPrintString()
-<<"\n\n    SubP = "<<subLeftSideParts.constraints<<"\n    SubQ = "<<subRightSideParts.constraints<<"\n\n\n" ;
+// std::cout<<"\n"<<"  OrigP = "<<(uqRule->getLeftSide())->prettyPrintString()<<"\n  OrigQ = "<<(uqRule->getRightSide())->prettyPrintString()<<"\n\n    SubP = "<<subLeftSideParts.constraints<<"\n    SubQ = "<<subRightSideParts.constraints<<"\n\n\n" ;
 }
 
         // Create the next product of expressions that we need to instantiate
@@ -3614,21 +3718,22 @@ std::cout<<"}\n "<<subMap.toString();
 
   }
 
+  std::cout<<"\nISL input str = "<<isl_input_string<"\n";
+  std::cout<<"\nISL output str = "<<isl_output_string<"\n";
+/*
   // Get all the symbolic constants that have replaced UFCs from ufcmap
-  instantiationParts.symVars += ", " + ufcmap->varTermStrList() + " ] -> ";
+  instantiationParts.symVars = ss.str() + ", " + ufcmap->varTermStrList() + " ] -> ";
 
   std::string isl_input_string = getFullStrFromParts( instantiationParts );
 
-//  std::cout<<"\nISL input str = "<<isl_input_string<"\n"; 
+  std::cout<<"\nISL input str = "<<isl_input_string<"\n"; 
 
-//  isl_input_string = string("[ m, colidx_M1_, colidx_1_, colidx___tv0_, colidx___tv1_, colidx___tv2_, colidx_colidx___tv2__, colidx_m_, colidx_rowptr___tv1P1__, colidx_rowptr___tv1__, rowptr_M1_, rowptr_0_, rowptr_1_, rowptr_2_, rowptr___tv0_, rowptr___tv0P1_, rowptr___tv1_, rowptr___tv1P1_, rowptr___tv2_, rowptr___tv2P1_, rowptr_colidx___tv2__, rowptr_colidx___tv2_P1_, rowptr_m_, rowptr_mP1_, rowptr_rowptr___tv1P1__, rowptr_rowptr___tv1P1_P1_, rowptr_rowptr___tv1__, rowptr_rowptr___tv1_P1_ ] -> { [i] -> [ip, jp] : ( i - colidx___tv2_ = 0 and i >= 0 and ip >= 0 and jp - rowptr___tv1_ >= 0 and -i + ip - 1 >= 0 and -i + m - 1 >= 0 and -ip + m - 1 >= 0 and -jp + rowptr___tv1P1_ - 1 >= 0 )  and ( (not(false)) || (colidx_1_ - colidx_M1_ = 0) ) and ( (not(colidx___tv2_ + 1 = 0)) || (colidx_M1_ - colidx_colidx___tv2__ = 0) ) and ( (not(rowptr___tv1_ + 1 = 0)) || (colidx_M1_ - colidx_rowptr___tv1__ = 0) ) and ( (not(jp + 1 = 0)) || (colidx_M1_ - colidx___tv2_ = 0) ) and ( (not(m + 1 = 0)) || (colidx_M1_ - colidx_m_ = 0) ) and ( (not(false)) || (colidx_1_ - colidx_M1_ = 0) ) and ( (not(true)) || (true) ) and ( (not(colidx___tv2_ - 1 = 0)) || (colidx_1_ - colidx_colidx___tv2__ = 0) )  and ( (not(rowptr___tv1P1_ - 1 = 0)) || (colidx_1_ - colidx_rowptr___tv1P1__ = 0) ) and ( (not(i - 1 = 0)) || (colidx_1_ - colidx___tv0_ = 0) ) and ( (not(m - 1 = 0)) || (colidx_1_ - colidx_m_ = 0) )  }") ;
-
-  std::cout<<"\n\n\n\nISL input 1 str = "<<isl_input_string<"\n"; 
+//  isl_input_string = ""
 
 //  std::string isl_output_string = passRelationStrThruISL( isl_input_string );
 
 //  std::cout<<"\n\n\n\nISL output str = "<<isl_output_string<"\n"; 
-
+*/
   result->setUnsat();
 
   return result;

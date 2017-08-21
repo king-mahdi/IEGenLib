@@ -290,8 +290,8 @@ std::string islMapToString ( isl_map* imap , isl_ctx *ctx )
 /*! This function buils and returns a full string from parts
 */
 std::string getFullStrFromParts (srParts  parts){
-  return (parts.symVars + parts.sC + parts.tupDecl +
-          parts.sepC + parts.constraints + parts.eC);
+  return (parts.symVars + "\n" + parts.sC + parts.tupDecl +
+          parts.sepC + "\n" + parts.constraints + "\n" + parts.eC);
 }
 
 }// iegenlib namespace
