@@ -57,6 +57,16 @@ then
   install_prefix="../$install_prefix"
 fi
 
+#Running aclocal and automake inside lib/cloog-0.18.4
+cd lib/cloog-0.18.4
+aclocal
+autoconf
+automake
+cd isl 
+aclocal
+autoconf
+automake
+cd ../../..
 
 #Generate the build system using cmake and the specified configuration options
 mkdir -p build
