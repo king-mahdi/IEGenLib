@@ -25,14 +25,14 @@ include(ExternalProject)
 ExternalProject_Add(libgmp
     DOWNLOAD_COMMAND ""
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/gmp-6.1.2
-    CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/gmp-6.1.2/configure --prefix=${CMAKE_CURRENT_SOURCE_DIR}/lib/installed --disable-shared --with-pic
+    CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/gmp-6.1.2/configure --prefix=${CMAKE_CURRENT_SOURCE_DIR}/lib/installed
     BUILD_COMMAND ${MAKE})
 
 ExternalProject_Add(libcloog-isl
     DOWNLOAD_COMMAND ""
     DEPENDS libgmp
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/cloog-0.18.4
-    CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/cloog-0.18.4/configure --prefix=${CMAKE_CURRENT_SOURCE_DIR}/lib/installed --with-gmp-prefix=${CMAKE_CURRENT_SOURCE_DIR}/lib/installed --disable-shared --with-pic
+    CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/cloog-0.18.4/configure --prefix=${CMAKE_CURRENT_SOURCE_DIR}/lib/installed --with-gmp-prefix=${CMAKE_CURRENT_SOURCE_DIR}/lib/installed
     BUILD_COMMAND ${MAKE})
 
 ## -I and -L on external projects
