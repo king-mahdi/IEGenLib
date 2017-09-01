@@ -194,6 +194,9 @@ public:
     void reset();
     ~UFCallTerm();
 
+    //! helper function for implementing copy-and-swap
+    void swap(UFCallTerm& second) throw();
+
     //! Comparison operator -- lexicographic order
     bool operator<(const Term& other) const;
 
@@ -540,6 +543,9 @@ public:
     //! Destructor
     void reset();
     virtual ~Exp();
+
+    //! helper function for implementing copy-and-swap
+    void swap(Exp& second) throw();
 
     //! Create a copy of this Exp (and of the same subclass)
     virtual Exp* clone() const;

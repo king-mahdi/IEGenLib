@@ -170,7 +170,7 @@ void simplify(string inputFile)
 
       // Add defined domain information to environment
       json uqCons = data[p][0]["User Defined"];
-      adduniQuantConstraints(uqCons);
+      addUniQuantRules(uqCons);
     }
 
 //    // Reading expected outputs
@@ -186,16 +186,26 @@ void simplify(string inputFile)
 //    Relation* copyRelation = rel->boundDomainRange();
 //    Relation* relAf = copyRelation->determineUnsat();
 
+    // TheOthers is the last type, considering union types start from 0
+    // we need an array with size TheOthers+1 to cover all types
+    bool *useRule = new bool[TheOthers+1]; 
+    for(int i = Monotonicity ; i <= TheOthers ; i++){
+        useRule[i] = true;
+    }
+    useRule[FuncConsistency] = false;
+
     char msg[100];
-//    sprintf(msg, "@@@ Relation No. %d: ", int(i+1) );
-//    printRelation( string(msg) , rel);
+    sprintf(msg, "@@@ Relation No. %d: ", int(i+1) );
+    printRelation( string(msg) , rel);
+
+    Conjunction *deRel = rel->determineUnsatOrReturnNewEqualities(useRule);
  
-//    if(  relAf->isUnsat() ){
-//      std::cout<<"\nIs unsatisfiable!\n";
-//      continue;    
-//    } else {
-//      std::cout<<"\nMight be satisfiable!!\n";      
-//    }
+    if(  deRel->isUnsat() ){
+      std::cout<<"\nIs unsatisfiable!\n";
+      continue;    
+    } else {
+      std::cout<<"\nMight be satisfiable!!\n";      
+    }
 
 //    //sprintf(msg, "@@@ Relation No. %d After: ", int(i+1) );
 //    //printRelation( string(msg) , relAf);

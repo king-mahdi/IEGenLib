@@ -48,7 +48,7 @@ public:
     UFCallMap& operator=( const UFCallMap& other );
 
     //! returns a string representing ufcterm as a symbolic constant
-    string symUFC( std::string &ufcName );
+    static string symUFC( std::string ufcName );
 
     /*! Use this to insert a UFCallTerm to map.
     **  The function creates an VarTerm representing the UFC then,
@@ -59,7 +59,7 @@ public:
     **  NOTE: The function ignores coefficient of the UFCallTerm.
     **        So, -2*row(i)  is considered as just row(i)
     */
-    void insert( UFCallTerm *ufc);
+    VarTerm insert( UFCallTerm *ufc);
 
     /*! Searches for ufcterm in the map. If ufcterm exists, it returns
     **  a pointer to equ. VarTerm, otherwise returns NULL.
@@ -83,6 +83,10 @@ public:
 
     //! prints the content of the map into a string, and returns it
     std::string toString();
+
+    //! Outputs list of variable terms created for UFCs, 
+    //  used in rule instantiation functionality.
+    std::string varTermStrList();
 
 private:
     std::map<UFCallTerm,VarTerm> mUFC2VarParam;

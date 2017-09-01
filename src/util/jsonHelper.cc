@@ -1,16 +1,13 @@
 /*!
- * \file util.h
+ * \file jsonHelper.cc
  *
- * \brief Utilities for the IEGen project
+ * \brief Utilities for reading json file information in the environment
  *
- * \date Started: 9/13/2010, but has been completely rewritten
- * # $Revision:: 622                $: last committed revision
- * # $Date:: 2013-01-18 13:11:32 -0#$: date of last committed revision
- * # $Author:: cathie               $: author of last committed revision
+ * \date Started: 2017
  *
- * \authors
+ * \authors Mahdi Soltan Mohammadi, Michelle Strout
  *
- * Copyright (c) 2012, Colorado State University <br>
+ * Copyright (c) 2017, University of Arizona <br>
  * All rights reserved. <br>
  * See ../../COPYING for details. <br>
  */
@@ -50,34 +47,16 @@ void addUFCs(json &ufcs){
 
 // Reads a list of universially quantified constraints from a json structure
 // and stores them in the environment
-void adduniQuantConstraints(json &uqCons){
+void addUniQuantRules(json &uqCons){
 
-  uniQuantConstraint uqConst;
+  UniQuantRule *uqRule;
   for (size_t j = 0; j < uqCons.size(); ++j){
 
-    // Read user defined constraints based on universally quantified
-    // expressions, then call addConsForUniversQuantExp to add them:
-    //    Forall e1, e2: if ( e1 exOP e2 ) => ( UF1(e1) ufOP UF2(e2) )
-    if( uqCons[j]["Type"].as<string>() == "UserDefPar2UFC"){
-      uqConst.setType("UserDefPar2UFC");
-      uqConst.setExpCompOp(uqCons[j]["Forall e1, e2: if e1 is? e2"].as<string>());
-      uqConst.setUfCompOp(uqCons[j][" is? "].as<string>());
-      uqConst.setUfSymbol1(uqCons[j]["then add: UFSymbol1?(e1)"].as<string>());
-      uqConst.setUfSymbol2(uqCons[j]["UFSymbol2?(e2)"].as<string>() );
-      iegenlib::addUniQuantConstraint(uqConst);
-    }
-
-    // read user defined relations between UFCs, then call 
-    // addConsForUFCallRel to add related constraints:
-    //    Forall e1, e2: if ( UF1(e1) ufOP UF2(e2) ) => ( e1 exOP e2 ) 
-    else if( uqCons[j]["Type"].as<string>() == "UserDefUFC2Par"){
-      uqConst.setType("UserDefUFC2Par");
-      uqConst.setExpCompOp(uqCons[j]["then add: e1 is? e2"].as<string>());
-      uqConst.setUfCompOp(uqCons[j][" is? "].as<string>() );
-      uqConst.setUfSymbol1(uqCons[j]["Forall e1, e2: if UFSymbol1?(e1)"].as<string>());
-      uqConst.setUfSymbol2(uqCons[j]["UFSymbol2?(e2)"].as<string>() );
-      iegenlib::addUniQuantConstraint(uqConst);
-    }
+    // forall e1, e2, ... : p => q
+    uqRule = new UniQuantRule(uqCons[j]["Type"].as<string>(), 
+                uqCons[j]["UniQuantVar"].as<string>(), 
+                uqCons[j]["p"].as<string>(), uqCons[j]["q"].as<string>());
+    currentEnv.addUniQuantRule( uqRule );
   }
 }
 

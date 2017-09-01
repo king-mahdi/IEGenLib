@@ -39,7 +39,7 @@ if(${BUILD_PYTHON})
     add_library(_iegenlib SHARED ${CMAKE_CURRENT_BINARY_DIR}/iegenlib_wrap.cc)
     #Link _iegenlib to the Python libraries
     target_link_libraries(_iegenlib iegenlib ${PYTHON_LIBRARIES})
-    target_link_libraries(_iegenlib cloog-isl isl gmp)
+    target_link_libraries(_iegenlib isl)
     #Add Link Flags when the code is built under MAC OSX
     if(APPLE)
     set_target_properties(_iegenlib PROPERTIES LINK_FLAGS "-flat_namespace -undefined suppress")

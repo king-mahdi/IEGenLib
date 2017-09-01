@@ -178,7 +178,18 @@ UFCallTerm::UFCallTerm(std::string funcName, unsigned int num_args,
 }
 
 UFCallTerm::UFCallTerm(const UFCallTerm& other) : Term(other) {
-    *this = other;
+//    *this = other;
+    mFuncName = other.mFuncName;
+    mNumArgs = other.mNumArgs;
+    mTupleIndex = other.mTupleIndex;
+
+    for (unsigned int i=0; i<mNumArgs; i++) {
+        if (other.mArgs[i]==NULL) {
+            throw assert_exception("UFCallTerm::operator=: other missing"
+                    " a parameter expression");
+        }
+        mArgs.push_back( other.mArgs[i]->clone() );
+    }
 }
 
 void UFCallTerm::reset() {
@@ -190,7 +201,7 @@ void UFCallTerm::reset() {
 
 //! Copy assignment
 UFCallTerm& UFCallTerm::operator=(const UFCallTerm& other) {
-    // clear out own args
+/*    // clear out own args
     reset();
 
     mFuncName = other.mFuncName;
@@ -205,13 +216,34 @@ UFCallTerm& UFCallTerm::operator=(const UFCallTerm& other) {
         mArgs.push_back( other.mArgs[i]->clone() );
     }
 
+    return *this;*/
+
+    UFCallTerm temp(other);
+    temp.swap (*this); // Non-throwing swap
     return *this;
 }
 
 //! Destructor
 UFCallTerm::~UFCallTerm() {
-    reset();
+//    reset();
+    for (unsigned int i=0; i<mArgs.size(); i++) {
+        if (mArgs[i]) { delete mArgs[i]; }
+    }
+    mArgs.clear();
 }
+
+
+//! helper function for implementing copy-and-swap
+void UFCallTerm::swap(UFCallTerm& second) throw(){
+
+    std::swap(mFuncName, second.mFuncName);
+    std::swap(mNumArgs, second.mNumArgs);
+    std::swap(mTupleIndex, second.mTupleIndex);
+    std::swap(mArgs, second.mArgs);
+}
+
+
+
 
 /*! Compare two terms in a canonical order, defined as follows:
 **      1. by term type: TupleVar, SymConst, UFCall, ConstVal
@@ -895,7 +927,12 @@ bool TupleExpTerm::factorMatches(const Term& other) const {
 /******************************** Exp ********************************/
 //! Copy constructor
 Exp::Exp(const Exp& other) {
-    *this = other;
+    for (std::list<Term*>::const_iterator i=other.mTerms.begin(); 
+                i != other.mTerms.end(); ++i) {
+        mTerms.push_back((*i)->clone());
+    }
+    mExpType = other.mExpType;
+//    *this = other;
 }
 
 void Exp::reset() {
@@ -907,7 +944,7 @@ void Exp::reset() {
 
 //! Copy assignment
 Exp& Exp::operator=(const Exp& other) {
-    reset();
+/*    reset();
     for (std::list<Term*>::const_iterator i=other.mTerms.begin(); 
                 i != other.mTerms.end(); ++i) {
         mTerms.push_back((*i)->clone());
@@ -915,11 +952,27 @@ Exp& Exp::operator=(const Exp& other) {
     mExpType = other.mExpType;
 
     return *this;
+*/
+
+    Exp temp(other);
+    temp.swap (*this); // Non-throwing swap
+    return *this;
 }
 
 //! Destructor
 Exp::~Exp() {
-    reset();
+//    reset();
+    for (std::list<Term*>::iterator i=mTerms.begin(); i != mTerms.end(); ++i) {
+        delete (*i);
+    }
+    mTerms.clear();
+}
+
+//! helper function for implementing copy-and-swap
+void Exp::swap(Exp& second) throw(){
+
+    std::swap(mExpType, second.mExpType);
+    std::swap(mTerms, second.mTerms);
 }
 
 //! Create a copy of this Exp (of the same subclass)
@@ -978,7 +1031,7 @@ Exp::prettyPrintString(const TupleDecl & aTupleDecl) const
 void Exp::addTerm(Term *term) {
 
     // If the coefficient is zero, then the term will have no effect.
-    if(term->coefficient() == 0){ delete term; return; }
+    if(term->coefficient() == 0 and ( mTerms.size() > 0) ){ delete term; return; }
 
     // Approach:
     // Iterate over our existing items (which are already sorted).
@@ -991,10 +1044,14 @@ void Exp::addTerm(Term *term) {
             delete term;
             // We've successfully combined this term with an existing one,
             // but it's possible that the resulting term has a coefficient
-            // of zero, in which case it should be removed.
+            // of zero, in which case it should be removed, however if there 
+            // is no other terms in the Exp especially if this is a parameter
+            // Exp we would want to add a Term representing 0. The if at the
+            // beginning of this function decides wether to add this 0 or not
             if (0 == t->coefficient()) {
                 mTerms.erase(i);
                 delete t;
+                addTerm( new Term(0) ); 
             }
             return;
         }
