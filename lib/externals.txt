@@ -1,4 +1,0 @@
-/s/bach/e/proj/rtrt/SVNRepository/IEGenProject/trunk/Dependencies/gtest gtest
-/s/bach/e/proj/rtrt/SVNRepository/IEGenProject/trunk/Dependencies/glog glog
-/s/bach/e/proj/rtrt/SVNRepository/IEGenProject/trunk/Dependencies/cloog cloog
-/s/bach/e/proj/rtrt/SVNRepository/IEGenProject/trunk/Dependencies/gmp-5.0.5 gmp-5.0.5
