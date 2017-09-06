@@ -67,34 +67,6 @@
                     " ",
                     "a read in S1 (y[colidx[j]]);  a write in S2 (y[i]); "
                   ]
-    },
-    {
-      "Name" : "CSR_Gauss-Seidel",
-      "Input Type" : "IEgenLIB Relation",
-      "Index" : "2",
-      "Relation" : "{ [i] -> [ip] : ip < i && i = ip && 0 <= i && i < m && 0 <= ip && ip < m }",
-
-      "Efficient Inspector complexity:" : "O( n^2 )",
-
-      "Expected" : "Not Satisfiable",
-      "Comment: Source of data access in the code for this relation" : [
-                    " ",
-                    "a write in S2 (y[i]);  a write in S2 (y[i]); "
-                  ]
-    },
-    {
-      "Name" : "CSR_Gauss-Seidel",
-      "Input Type" : "IEgenLIB Relation",
-      "Index" : "3",
-      "Relation" : "{ [i,j] -> [ip,jp] : i < ip && j = jp && 0 <= i && i < m && 0 <= ip && ip < m && rowptr(i) <= j && j < rowptr(i+1) && rowptr(ip) <= jp && jp < rowptr(ip+1) }",
-
-      "Efficient Inspector complexity:" : "O( n^2 )",
-
-      "Expected" : "Not Satisfiable",
-      "Comment: Source of data access in the code for this relation" : [
-                    " ",
-                    "a write in S2 (y[i]);  a write in S2 (y[i]); "
-                  ]
     }
   ]
 ]

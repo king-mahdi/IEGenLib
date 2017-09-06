@@ -140,7 +140,79 @@ int main(int argc, char **argv)
 // the simplification algorithm to the sets found in the file. 
 void simplify(string inputFile)
 {
+if(1){
+    iegenlib::setCurrEnv();
+    iegenlib::appendCurrEnv("tau",
+        new Set("{[i]:0<=i &&i<N}"), 
+        new Set("{[i,j]:0<=i &&i<M && 0<=j &&j<P}"), true,
+        iegenlib::Monotonic_NONE);
 
+/* MMS, keep for historical reasons
+    // When normalize only does step 0 it just groups together
+    // indexed UFCalls.
+    {
+    Set* s = new Set("{[i,j,k] : i=tau(k)[0] && j=tau(k)[1]}");
+    EXPECT_EQ("{ [i, j, k] : __tv0 - tau(__tv2)[0] = 0 "
+                "&& __tv1 - tau(__tv2)[1] = 0 }", s->toString() );
+    s->normalize();
+    Set* expected = new Set("{[i,j,k] : (i,j)=tau(k)}");
+    EXPECT_EQ(expected->toString(),s->toString());
+    delete s;
+    delete expected;
+    }
+
+    {
+    // When normalize does step 0 and step 1 it creates
+    // a set with affine constraints that can be sent to ISL.
+    Set* s = new Set("{[i,j,k] : i=tau(k)[0] && j=tau(k)[1]}");
+    EXPECT_EQ("{ [i, j, k] : __tv0 - tau(__tv2)[0] = 0 "
+                "&& __tv1 - tau(__tv2)[1] = 0 }", s->toString() );
+    s->normalize();
+    Set* expected = new Set("{[i,j,k,tv3,tv4] : 0<=tv3 && tv3<M && "
+                            "0<=tv4 && tv4<P "
+                            " && 0<=k && k<N && tv3=i && tv4=j}");
+    EXPECT_EQ(expected->toString(),s->toString());
+    delete s;
+    delete expected;
+    }
+   
+     {
+    // When normalize does step 0 and step 1 and step 2 it creates
+    // a set with affine constraints and sends it to ISL.
+    Set* s = new Set("{[i,j,k] : i=tau(k)[0] && j=tau(k)[1]}");
+    EXPECT_EQ("{ [i, j, k] : __tv0 - tau(__tv2)[0] = 0 "
+                "&& __tv1 - tau(__tv2)[1] = 0 }", s->toString() );
+    s->normalize();
+    Set* expected = new Set("{ [i, j, k, i, j] : k >= 0 && i >= 0 && "
+                            "j >= 0 && k <= -1 + N && i <= -1 + M && "
+                            "j <= -1 + P }");
+    EXPECT_EQ(expected->toString(),s->toString());
+
+    delete s;
+    delete expected;
+    }
+*/
+     {
+    // When normalize does steps 0 through 3 it creates
+    // a set with affine constraints and sends it through ISL and
+    // re-establishes the original UFCalls
+    Set* s = new Set("{[i,j,k] : i=tau(k)[0] && j=tau(k)[1]}");
+    //EXPECT_EQ("{ [i, j, k] : __tv0 - tau(__tv2)[0] = 0 "
+    //            "&& __tv1 - tau(__tv2)[1] = 0 }", s->toString() );
+    s->normalize();
+std::cout<<"\n\nNSet = "<<s->toISLString()<<"\n\n";
+    //Set* expected = new Set("{[i,j,k] : i=tau(k)[0] && j=tau(k)[1]"
+    //                        " && k >= 0 && tau(k)[0] >= 0 && tau(k)[1] >= 0"
+     //                      " && k < N && tau(k)[0] < M && tau(k)[1] < P }");
+
+    //EXPECT_EQ(expected->toString(),s->toString());
+
+    delete s;
+  //  delete expected;
+    }
+
+}
+else{
   iegenlib::setCurrEnv();
   std::set<int> parallelTvs;
   // (0)
@@ -252,6 +324,8 @@ void simplify(string inputFile)
   }
 
  } // End of p loop
+}
+
 }
 
 bool printRelation(string msg, Relation *rel){

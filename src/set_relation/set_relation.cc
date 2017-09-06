@@ -86,8 +86,9 @@ Set* passSetThruISL(Set* s){
   // For more detail refer to revertISLTupDeclToOrig function's comments. 
   int inArity = s->arity(), outArity = 0;
   string corrected = revertISLTupDeclToOrig( sstr, islStr, inArity, outArity);
-  Set* result = new Set(corrected);
-
+std::cout<<"\n\nISL String : "<<islStr<<"\nISL corrected : "<<corrected<<"\n\n";
+  Set* result = new Set(islStr);
+//  Set* result = new Set(islStr);
   return result;
 }
 
@@ -1978,6 +1979,8 @@ void Set::normalize() {
     // Replace uf calls with the variables to create an affine superset.
     Set* superset_copy = superAffineSet(uf_call_map);
 
+//std::cout<<"\n\nSet = "<<superset_copy->toISLString()<<"\n\n";
+
     // Send affine super set to ISL and let it normalize it.
     Set* superset_normalized = passSetThruISL(superset_copy);
  
@@ -3445,18 +3448,18 @@ class VisitorGatherAllTerms : public Visitor {
     }
 
     std::vector<Term*> getTerms() { 
-        for (std::set<Term>::iterator it=constTerms.begin(); 
+/*        for (std::set<Term>::iterator it=constTerms.begin(); 
              it!=constTerms.end(); it++) 
-        { allTerms.insert( allTerms.end() , (*it).clone() ); }
+        { allTerms.insert( allTerms.end() , (*it).clone() ); }*/
         for (std::set<UFCallTerm>::iterator it=ufcTerms.begin(); 
              it!=ufcTerms.end(); it++) 
         { allTerms.insert( allTerms.end() , (*it).clone() ); }
         for (std::set<TupleVarTerm>::iterator it=tupVarTerms.begin(); 
              it!=tupVarTerms.end(); it++) 
         { allTerms.insert( allTerms.end() , (*it).clone() ); }
-        for (std::set<VarTerm>::iterator it=varTerms.begin(); 
+/*        for (std::set<VarTerm>::iterator it=varTerms.begin(); 
              it!=varTerms.end(); it++) 
-        { allTerms.insert( allTerms.end() , (*it).clone() ); }
+        { allTerms.insert( allTerms.end() , (*it).clone() ); }*/
         return allTerms;
     }
 };
@@ -3699,10 +3702,6 @@ if( leftStrInter == "true" &&
 //                                          ")) || (" + rightStr + ") )";
 
 
-
-  std::cout<<"\n\n ISL cont. output = "<<isl_output_string<<" \nk = "<<k<<"\n";
-  std::cout<<string("&& ( (not(" + leftStr + ")) || (" + rightStr + ") )");
-
 temp.constraints = "( (not(" + leftStr + ")) || (" + rightStr + ") )";
 temp.symVars = ss.str();
 if( ufcmap->varTermStrList() != "")
@@ -3713,8 +3712,11 @@ temp.symVars  +=  " ] -> ";
 islInsMap = isl_union_map_read_from_str(ctx, (getFullStrFromParts(temp)).c_str());
 islMap = isl_union_map_intersect( islMap, islInsMap);
 islMap = isl_union_map_coalesce(islMap);
-std::cout<<"\n\n InsRel = "<<(getFullStrFromParts(temp)).c_str()<<"\n";
+islMap = isl_union_map_remove_redundancies(islMap);
 
+std::cout<<"\n\n InsRel = "<<(getFullStrFromParts(temp)).c_str()<<"\n";
+isl_union_map* islTemp = isl_union_map_copy(islMap);
+std::cout<<"\n\n ISL cont. output = "<<islUnionMapToString(islTemp,ctx)<<" \nk = "<<k<<"\n";
 
 /*
 

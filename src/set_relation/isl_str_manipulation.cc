@@ -166,14 +166,9 @@ std::string revertISLTupDeclToOrig(std::string origStr, std::string islStr,
     eqsStr = missingEqs( origParts.tupDecl , islParts.tupDecl ,
                                 inArity, outArity, noFirstAnd );
     
-    if( islParts.constraints.length() == 0 && eqsStr.length() == 0){
-        correctedStr = islParts.symVars + islParts.sC +
-                       origParts.tupDecl + islParts.eC;
-    } else {
-        correctedStr = islParts.symVars + islParts.sC +
-                       origParts.tupDecl + islParts.sepC + "(" +
-                       islParts.constraints + ")" + eqsStr + islParts.eC;
-    }
+    correctedStr = islParts.symVars + islParts.sC +
+                       origParts.tupDecl + islParts.sepC + 
+                       islParts.constraints + eqsStr +islParts.eC;
 
     return correctedStr;
 }
